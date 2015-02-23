@@ -1,0 +1,279 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'sweet.js' ]
+2 info using npm@1.3.5
+3 info using node@v0.10.15
+4 verbose cache add [ 'sweet.js', null ]
+5 verbose cache add name=undefined spec="sweet.js" args=["sweet.js",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'sweet.js',
+6 verbose parsed url   path: 'sweet.js',
+6 verbose parsed url   href: 'sweet.js' }
+7 silly lockFile 92a497de-sweet-js sweet.js
+8 verbose lock sweet.js /home/dabrowsa/.npm/92a497de-sweet-js.lock
+9 silly lockFile 92a497de-sweet-js sweet.js
+10 silly lockFile 92a497de-sweet-js sweet.js
+11 verbose addNamed [ 'sweet.js', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 39c774ed-sweet-js sweet.js@
+14 verbose lock sweet.js@ /home/dabrowsa/.npm/39c774ed-sweet-js.lock
+15 silly addNameRange { name: 'sweet.js', range: '*', hasData: false }
+16 verbose url raw sweet.js
+17 verbose url resolving [ 'https://registry.npmjs.org/', './sweet.js' ]
+18 verbose url resolved https://registry.npmjs.org/sweet.js
+19 info trying registry request attempt 1 at 12:54:30
+20 http GET https://registry.npmjs.org/sweet.js
+21 http 200 https://registry.npmjs.org/sweet.js
+22 silly registry.get cb [ 200,
+22 silly registry.get   { vary: 'Accept',
+22 silly registry.get     server: 'CouchDB/1.3.0 (Erlang OTP/R15B03)',
+22 silly registry.get     etag: '"DWCK1XI3K50SRVB9BAO2DVBF6"',
+22 silly registry.get     date: 'Tue, 06 Aug 2013 16:54:30 GMT',
+22 silly registry.get     'content-type': 'application/json',
+22 silly registry.get     'content-length': '13627' } ]
+23 silly addNameRange number 2 { name: 'sweet.js', range: '*', hasData: true }
+24 silly addNameRange versions [ 'sweet.js', [ '0.1.0', '0.1.1', '0.1.2', '0.1.3' ] ]
+25 verbose addNamed [ 'sweet.js', '0.1.3' ]
+26 verbose addNamed [ '0.1.3', '0.1.3' ]
+27 silly lockFile db9cef41-sweet-js-0-1-3 sweet.js@0.1.3
+28 verbose lock sweet.js@0.1.3 /home/dabrowsa/.npm/db9cef41-sweet-js-0-1-3.lock
+29 silly lockFile 9a3fcd2c--org-sweet-js-sweet-js-0-1-3-tgz https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz
+30 verbose lock https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz /home/dabrowsa/.npm/9a3fcd2c--org-sweet-js-sweet-js-0-1-3-tgz.lock
+31 verbose addRemoteTarball [ 'https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz',
+31 verbose addRemoteTarball   '0aeb5e5b3617a1bfc0f05d21114eed35b1da1ccd' ]
+32 info retry fetch attempt 1 at 12:54:30
+33 verbose fetch to= /home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz
+34 http GET https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz
+35 http 200 https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz
+36 verbose tar unpack /home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz
+37 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+38 verbose lock tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package /home/dabrowsa/.npm/b833382c-0682-0-29160983418114483-package.lock
+39 silly lockFile 68b13c15-0682-0-29160983418114483-tmp-tgz tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz
+40 verbose lock tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz /home/dabrowsa/.npm/68b13c15-0682-0-29160983418114483-tmp-tgz.lock
+41 silly gunzTarPerm modes [ '755', '644' ]
+42 silly gunzTarPerm extractEntry package.json
+43 silly gunzTarPerm extractEntry .npmignore
+44 silly gunzTarPerm extractEntry README.md
+45 silly gunzTarPerm extractEntry prism.js
+46 silly gunzTarPerm extractEntry build.js
+47 silly gunzTarPerm extractEntry test_benchmark.js
+48 silly gunzTarPerm extractEntry Makefile
+49 silly gunzTarPerm extractEntry browser/codemirror.css
+50 silly gunzTarPerm extractEntry browser/debug.html
+51 silly gunzTarPerm extractEntry browser/mode/javascript/javascript.js
+52 silly gunzTarPerm extractEntry browser/mode/javascript/index.html
+53 silly gunzTarPerm extractEntry browser/mode/javascript/typescript.html
+54 silly gunzTarPerm extractEntry browser/scripts/codemirror.js
+55 silly gunzTarPerm extractEntry browser/scripts/escodegen.js
+56 silly gunzTarPerm extractEntry browser/scripts/expander.js
+57 silly gunzTarPerm extractEntry browser/scripts/jquery.js
+58 silly gunzTarPerm extractEntry browser/scripts/es6-collections.js
+59 silly gunzTarPerm extractEntry browser/scripts/parser.js
+60 silly gunzTarPerm extractEntry browser/scripts/require.js
+61 silly gunzTarPerm extractEntry browser/scripts/sjs.js
+62 silly gunzTarPerm extractEntry browser/scripts/sweet.js
+63 silly gunzTarPerm extractEntry browser/scripts/sweeten.js
+64 silly gunzTarPerm extractEntry browser/scripts/contracts-js.js
+65 silly gunzTarPerm extractEntry browser/scripts/underscore.js
+66 silly gunzTarPerm extractEntry browser/scripts/main.js
+67 silly gunzTarPerm extractEntry browser/solarized.css
+68 silly gunzTarPerm extractEntry editor/codemirror.js
+69 silly gunzTarPerm extractEntry editor/addon/runmode.js
+70 silly gunzTarPerm extractEntry editor/codemirror.css
+71 silly gunzTarPerm extractEntry editor/mode/runmode.js
+72 silly gunzTarPerm extractEntry editor/mode/javascript/javascript.js
+73 silly gunzTarPerm extractEntry editor/theme/sweetprism.css
+74 silly gunzTarPerm extractEntry CNAME
+75 silly gunzTarPerm extractEntry lib/expander.js
+76 silly gunzTarPerm extractEntry lib/parser.js
+77 silly gunzTarPerm extractEntry lib/sjs.js
+78 silly gunzTarPerm extractEntry lib/sweet.js
+79 silly gunzTarPerm extractEntry mozilla-tab.png
+80 silly gunzTarPerm extractEntry bin/sjs
+81 silly gunzTarPerm extractEntry prism.css
+82 silly gunzTarPerm extractEntry LICENSE.BSD
+83 silly gunzTarPerm extractEntry src/expander.js
+84 silly gunzTarPerm extractEntry src/parser.js
+85 silly gunzTarPerm extractEntry src/sjs.js
+86 silly gunzTarPerm extractEntry src/sweet.js
+87 silly gunzTarPerm extractEntry sweetjs.png
+88 silly gunzTarPerm extractEntry test/test_bad_patterns.js
+89 silly gunzTarPerm extractEntry test/test_enforest.js
+90 silly gunzTarPerm extractEntry test/test_expander_units.js
+91 silly gunzTarPerm extractEntry test/test_macro_examples.js
+92 silly gunzTarPerm extractEntry test/test_macro_hygiene.js
+93 silly gunzTarPerm extractEntry test/test_macro_patterns.js
+94 silly gunzTarPerm extractEntry test/test_reader.js
+95 silly gunzTarPerm extractEntry test/test_single.js
+96 silly gunzTarPerm extractEntry index.html
+97 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+98 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+99 silly lockFile 68b13c15-0682-0-29160983418114483-tmp-tgz tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz
+100 silly lockFile 68b13c15-0682-0-29160983418114483-tmp-tgz tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/tmp.tgz
+101 verbose tar pack [ '/home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz',
+101 verbose tar pack   '/home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package' ]
+102 verbose tarball /home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+103 verbose folder /home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+104 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+105 verbose lock tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package /home/dabrowsa/.npm/b833382c-0682-0-29160983418114483-package.lock
+106 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+107 verbose lock tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz /home/dabrowsa/.npm/f2a95234-a-npm-sweet-js-0-1-3-package-tgz.lock
+108 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+109 silly lockFile b833382c-0682-0-29160983418114483-package tar:///home/dabrowsa/tmp/npm-3962-a-pUyYsL/1375808070682-0.29160983418114483/package
+110 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+111 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+112 silly lockFile 79ce7056-rowsa-npm-sweet-js-0-1-3-package /home/dabrowsa/.npm/sweet.js/0.1.3/package
+113 verbose lock /home/dabrowsa/.npm/sweet.js/0.1.3/package /home/dabrowsa/.npm/79ce7056-rowsa-npm-sweet-js-0-1-3-package.lock
+114 silly lockFile 79ce7056-rowsa-npm-sweet-js-0-1-3-package /home/dabrowsa/.npm/sweet.js/0.1.3/package
+115 silly lockFile 79ce7056-rowsa-npm-sweet-js-0-1-3-package /home/dabrowsa/.npm/sweet.js/0.1.3/package
+116 verbose tar unpack /home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+117 silly lockFile 1e8aa620-rowsa-npm-sweet-js-0-1-3-package tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package
+118 verbose lock tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package /home/dabrowsa/.npm/1e8aa620-rowsa-npm-sweet-js-0-1-3-package.lock
+119 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+120 verbose lock tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz /home/dabrowsa/.npm/f2a95234-a-npm-sweet-js-0-1-3-package-tgz.lock
+121 silly gunzTarPerm modes [ '755', '644' ]
+122 silly gunzTarPerm extractEntry package.json
+123 silly gunzTarPerm extractEntry .npmignore
+124 silly gunzTarPerm extractEntry README.md
+125 silly gunzTarPerm extractEntry prism.js
+126 silly gunzTarPerm extractEntry build.js
+127 silly gunzTarPerm extractEntry test_benchmark.js
+128 silly gunzTarPerm extractEntry Makefile
+129 silly gunzTarPerm extractEntry browser/codemirror.css
+130 silly gunzTarPerm extractEntry browser/debug.html
+131 silly gunzTarPerm extractEntry browser/mode/javascript/javascript.js
+132 silly gunzTarPerm extractEntry browser/mode/javascript/index.html
+133 silly gunzTarPerm extractEntry browser/mode/javascript/typescript.html
+134 silly gunzTarPerm extractEntry browser/scripts/codemirror.js
+135 silly gunzTarPerm extractEntry browser/scripts/escodegen.js
+136 silly gunzTarPerm extractEntry browser/scripts/expander.js
+137 silly gunzTarPerm extractEntry browser/scripts/jquery.js
+138 silly gunzTarPerm extractEntry browser/scripts/es6-collections.js
+139 silly gunzTarPerm extractEntry browser/scripts/parser.js
+140 silly gunzTarPerm extractEntry browser/scripts/require.js
+141 silly gunzTarPerm extractEntry browser/scripts/sjs.js
+142 silly gunzTarPerm extractEntry browser/scripts/sweet.js
+143 silly gunzTarPerm extractEntry browser/scripts/sweeten.js
+144 silly gunzTarPerm extractEntry browser/scripts/contracts-js.js
+145 silly gunzTarPerm extractEntry browser/scripts/underscore.js
+146 silly gunzTarPerm extractEntry browser/scripts/main.js
+147 silly gunzTarPerm extractEntry browser/solarized.css
+148 silly gunzTarPerm extractEntry editor/codemirror.js
+149 silly gunzTarPerm extractEntry editor/addon/runmode.js
+150 silly gunzTarPerm extractEntry editor/codemirror.css
+151 silly gunzTarPerm extractEntry editor/mode/runmode.js
+152 silly gunzTarPerm extractEntry editor/mode/javascript/javascript.js
+153 silly gunzTarPerm extractEntry editor/theme/sweetprism.css
+154 silly gunzTarPerm extractEntry CNAME
+155 silly gunzTarPerm extractEntry lib/expander.js
+156 silly gunzTarPerm extractEntry lib/parser.js
+157 silly gunzTarPerm extractEntry lib/sjs.js
+158 silly gunzTarPerm extractEntry lib/sweet.js
+159 silly gunzTarPerm extractEntry mozilla-tab.png
+160 silly gunzTarPerm extractEntry bin/sjs
+161 silly gunzTarPerm extractEntry prism.css
+162 silly gunzTarPerm extractEntry LICENSE.BSD
+163 silly gunzTarPerm extractEntry src/expander.js
+164 silly gunzTarPerm extractEntry src/parser.js
+165 silly gunzTarPerm extractEntry src/sjs.js
+166 silly gunzTarPerm extractEntry src/sweet.js
+167 silly gunzTarPerm extractEntry sweetjs.png
+168 silly gunzTarPerm extractEntry test/test_bad_patterns.js
+169 silly gunzTarPerm extractEntry test/test_enforest.js
+170 silly gunzTarPerm extractEntry test/test_expander_units.js
+171 silly gunzTarPerm extractEntry test/test_macro_examples.js
+172 silly gunzTarPerm extractEntry test/test_macro_hygiene.js
+173 silly gunzTarPerm extractEntry test/test_macro_patterns.js
+174 silly gunzTarPerm extractEntry test/test_reader.js
+175 silly gunzTarPerm extractEntry test/test_single.js
+176 silly gunzTarPerm extractEntry index.html
+177 silly lockFile 1e8aa620-rowsa-npm-sweet-js-0-1-3-package tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package
+178 silly lockFile 1e8aa620-rowsa-npm-sweet-js-0-1-3-package tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package
+179 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+180 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+181 verbose chmod /home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz 644
+182 verbose chown /home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz [ 1000, 100 ]
+183 silly lockFile 9a3fcd2c--org-sweet-js-sweet-js-0-1-3-tgz https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz
+184 silly lockFile 9a3fcd2c--org-sweet-js-sweet-js-0-1-3-tgz https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz
+185 silly lockFile db9cef41-sweet-js-0-1-3 sweet.js@0.1.3
+186 silly lockFile db9cef41-sweet-js-0-1-3 sweet.js@0.1.3
+187 silly lockFile 39c774ed-sweet-js sweet.js@
+188 silly lockFile 39c774ed-sweet-js sweet.js@
+189 silly resolved [ { name: 'sweet.js',
+189 silly resolved     description: 'Hygienic Macros for JavaScript',
+189 silly resolved     main: 'lib/sweet.js',
+189 silly resolved     version: '0.1.3',
+189 silly resolved     engines: { node: '>=0.4.0' },
+189 silly resolved     author: { name: 'Tim Disney' },
+189 silly resolved     licenses: [ [Object] ],
+189 silly resolved     scripts: { test: 'node build' },
+189 silly resolved     directories: { test: 'test' },
+189 silly resolved     bin: { sjs: 'bin/sjs' },
+189 silly resolved     dependencies:
+189 silly resolved      { 'expect.js': '~0.1.2',
+189 silly resolved        optimist: '~0.3.4',
+189 silly resolved        underscore: '~1.3.3',
+189 silly resolved        escodegen: '0.0.9',
+189 silly resolved        'contracts-js': '0.3.x',
+189 silly resolved        'sweet-contracts': '0.1.x',
+189 silly resolved        'es6-collections': '0.2.x' },
+189 silly resolved     devDependencies:
+189 silly resolved      { mocha: '~1.3.2',
+189 silly resolved        'expect.js': '0.1.x',
+189 silly resolved        shelljs: '0.1.x',
+189 silly resolved        benchmark: '1.0.x' },
+189 silly resolved     repository: { type: 'git', url: 'git://github.com/mozilla/sweet.js.git' },
+189 silly resolved     keywords: [ 'macros', 'javascript' ],
+189 silly resolved     license: 'BSD',
+189 silly resolved     readme: 'sweet.js\n========\n\nHygienic Macros for JavaScript!\n\n* Documentation at [sweetjs.org](http://sweetjs.org). \n* Overview and motivation in this [talk](https://air.mozilla.org/sweetjs/).\n* Example macros on the [wiki](https://github.com/mozilla/sweet.js/wiki/Example-macros). \n* [Mailing list](https://groups.google.com/forum/#!forum/sweetjs) for discussion\n* IRC channel #sweet.js on irc.mozilla.org\n\n## Use\n\n### Using Node\n\nInstall with npm:\n\n    $ npm install sweet.js\n\nTo try it out make a file `test_macros.sjs`:\n\n```js\n// functions can now be spelled def!\nmacro def {\n  case $name:ident $params $body => {\n    function $name $params $body\n  }\n}\ndef add (a, b) {\n  return a + b;\n}\n\nconsole.log( add(3, 7) );\n```\n\nAnd compile it with `sjs`:\n\n    $ sjs -o output.js test_macros.sjs\n    $ node output.js\n    10\n\nAlternately you can require an sjs file from node. For example, in `main.js` add:\n\n    var sjs = require(\'sweet.js\'),\n        example = require(\'./example\');\n    \n    example.one;\n\nWhere ./example.sjs contains:\n\n    macro A {\n        case ($a + $b) => {\n\t        $a\n\t    }\n    }\n\n    exports.one = A(1 + 2);\n\nAnd just run `main.js` in node.\n\n### Using AMD in the browser\n\nAn AMD loader is provided at [require-sweet](https://github.com/iammerrick/require-sweet).\n\n    define([\'sweeten!a/javascript/dep-with-macros\'], function(dep) {\n      // dep is compiled to JS at this point.\n    });\n\n## Hacking\n\nInstall the dev dependencies:\n\n    $ npm install --dev\n\nAnd run the [tests](https://github.com/mozilla/sweet.js/tree/master/test):\n\n    $ npm test\n\n## Changelog\n\n* [0.1.2](https://github.com/mozilla/sweet.js/tree/v0.1.2)\n    * `:expr` parse class working #28\n    * hygiene fixes #15 #17\n    * allowing macros to override keywords #33\n    * major refactoring of expander\n* [0.1.1](https://github.com/mozilla/sweet.js/tree/v0.1.1)\n    * node autoloading, AMD support\n    * fixes to issues #18, #24, #26, #40\n* 0.1.0 (initial release)\n',
+189 silly resolved     readmeFilename: 'README.md',
+189 silly resolved     bugs: { url: 'https://github.com/mozilla/sweet.js/issues' },
+189 silly resolved     _id: 'sweet.js@0.1.3',
+189 silly resolved     dist: { shasum: '2cc72cbff860388708dc1938465f582dd2d60cba' },
+189 silly resolved     _from: 'sweet.js@',
+189 silly resolved     _resolved: 'https://registry.npmjs.org/sweet.js/-/sweet.js-0.1.3.tgz' } ]
+190 info install sweet.js@0.1.3 into /usr/lib
+191 info installOne sweet.js@0.1.3
+192 info /usr/lib/node_modules/sweet.js unbuild
+193 verbose tar unpack /home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+194 silly lockFile aefddc1a-ar-usr-lib-node-modules-sweet-js tar:///usr/lib/node_modules/sweet.js
+195 verbose lock tar:///usr/lib/node_modules/sweet.js /home/dabrowsa/.npm/aefddc1a-ar-usr-lib-node-modules-sweet-js.lock
+196 silly lockFile f2a95234-a-npm-sweet-js-0-1-3-package-tgz tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz
+197 verbose lock tar:///home/dabrowsa/.npm/sweet.js/0.1.3/package.tgz /home/dabrowsa/.npm/f2a95234-a-npm-sweet-js-0-1-3-package-tgz.lock
+198 silly gunzTarPerm modes [ '755', '644' ]
+199 error Error: EACCES, mkdir '/usr/lib/node_modules/sweet.js'
+199 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/sweet.js']
+199 error   errno: 3,
+199 error   code: 'EACCES',
+199 error   path: '/usr/lib/node_modules/sweet.js',
+199 error   fstream_type: 'Directory',
+199 error   fstream_path: '/usr/lib/node_modules/sweet.js',
+199 error   fstream_class: 'DirWriter',
+199 error   fstream_stack:
+199 error    [ '/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23',
+199 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53',
+199 error      'Object.oncomplete (fs.js:107:15)' ] }
+200 error Please try running this command again as root/Administrator.
+201 error System Linux 3.8.13-gentoo
+202 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "sweet.js"
+203 error cwd /home/dabrowsa/mygit/StrategyGames
+204 error node -v v0.10.15
+205 error npm -v 1.3.5
+206 error path /usr/lib/node_modules/sweet.js
+207 error fstream_path /usr/lib/node_modules/sweet.js
+208 error fstream_type Directory
+209 error fstream_class DirWriter
+210 error code EACCES
+211 error errno 3
+212 error stack Error: EACCES, mkdir '/usr/lib/node_modules/sweet.js'
+213 error fstream_stack /usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23
+213 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53
+213 error fstream_stack Object.oncomplete (fs.js:107:15)
+214 verbose exit [ 3, true ]

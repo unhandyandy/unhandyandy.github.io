@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+    <title>Distortion Fields</title>
+    <meta content="Andrew Dabrowski" name="author">
+    <meta content="java program for distorting images"
+      name="description">
+  </head>
+  <body alink="#ff99ff" background="Abraham_Lincoln_qt_small.png"
+    link="#ff0000" text="#33ff33" vlink="#ffcccc">
+    <h2>Distortion<br>
+    </h2>
+    This is a java program that applies conformal mappings to
+    images.&nbsp; Here are three versions for download;<br>
+    <br>
+    <ul>
+      <li><a href="distortion_linux32.tar.bz2">Linux</a></li>
+      <li><a href="distortion_macosx.tar.bz2">Mac</a></li>
+      <li><a href="distortion_win32.tar.bz2">Windows</a>.</li>
+    </ul>
+    <p><br>
+    </p>
+    <h3>Instructions</h3>
+    <p>When you first start the program it prompts you for an image file
+      to work on.&nbsp; Any jpeg or png file should work.<br>
+    </p>
+    <p>Controls are by mouse and single keystrokes.&nbsp; Here are the
+      keystroke commands.</p>
+    <table border="1" cellpadding="2" cellspacing="2" height="185"
+      width="749">
+      <tbody>
+        <tr>
+          <td align="center" valign="top" width="30">&lt;spacebar&gt;</td>
+          <td valign="top">toggles between original and distorted image</td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" width="30">h<br>
+          </td>
+          <td valign="top">toggles hide/show of pinpoints<br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" width="30">f<br>
+          </td>
+          <td valign="top">fixes distortion, i.e. makes distorted image
+            the new original to work on<br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" width="30">s<br>
+          </td>
+          <td valign="top">saves image<br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top" width="30">c<br>
+          </td>
+          <td valign="top">change conformal mapping - cycles through the
+            3 available mappings<br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top">o<br>
+          </td>
+          <td valign="top">opens new file<br>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" valign="top">q<br>
+          </td>
+          <td valign="top">quits program<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+      The mouse is used to move the colored pinpoints, which work
+      differently for each mapping.<br>
+    </p>
+    <dl>
+      <dt>Moebius</dt>
+      <dd>The green, red, and blue points in the original image are
+        mapped to corresponding points in the distorted image.</dd>
+      <dt>Fix3</dt>
+      <dd>The green, purple, and blue points in the original image are
+        fixed; the orange and red points are mapped as for Moebius.</dd>
+      <dt>Frcn</dt>
+      <dd>The green, purple, blue, and orange points in the original
+        image are fixed; the red point is mapped as for Moebius.</dd>
+    </dl>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+    <p><br>
+    </p>
+  </body>
+</html>

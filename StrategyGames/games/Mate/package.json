@@ -1,0 +1,24 @@
+{
+  "name": "Mate",
+  "main": "index.html",
+    "description": "perfect information card game",
+  "version": "0.1.0",
+  "keywords": [ "game", "strategy", "cards", "mate", "Capellen" ],
+  "window": {
+    "title": "Mate",
+    //"icon": "gerrymander.png",
+    "toolbar": false,
+    "frame": true,
+    "width": 1000,
+    "height": 1000,
+    "position": "mouse",
+    "min_width": 1000,
+    "min_height": 800,
+    "max_width": 1200,
+    "max_height": 1000
+  },
+  "webkit": {
+    "plugin": false,
+      "page-cache": true
+  }
+}

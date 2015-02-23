@@ -1,0 +1,22 @@
+
+engine.js,603
+function makeInitBdTab(21,628
+function initNbrs(48,1183
+function makePosInit(119,3341
+function plyrSgn(124,3415
+function selectSquares(131,3498
+function movesFromPos(140,3754
+function moveSortVal(164,4496
+function sortMoves(171,4648
+function positionFromMove(180,4865
+function moveToString(195,5258
+function playerToString(203,5442
+function poscurToDisplay(207,5525
+function gameOverQ(217,5799
+function scorePos(241,6480
+function scoreNbrsPos(254,6834
+function winQ(263,7126
+function lossQ(275,7364
+function drawQ(280,7451
+function scoreGame(287,7602
+function evalPosUncert(300,7844

@@ -1,0 +1,117 @@
+<html>
+<script>
+function getGameName(){
+    return "terniLapilli";
+};
+</script>
+<script type="text/javascript" src="../../mydefs.js">
+</script>
+<script type="text/javascript" src="../../strategygames03.js">
+</script>
+<script type="text/javascript" src="./terniLapilli01.js">
+</script>
+<style type="text/css">
+body
+{
+background-color: Green;
+background-image:url("./heic0901a_H1.jpg");
+}
+h1
+{
+color:white;
+text-align:center;
+}
+h5
+{
+color:white;
+font-size:14px;
+}
+div
+{
+font-family:"Times New Roman";
+font-size:36px;
+color:#bcd;
+}
+select
+{
+width:"2em";
+font-size:32px;
+background-color:#abc;
+color:#640;
+}
+input
+{
+font-size:24px;
+background-color:#bca;
+color:#406;
+}
+span.bull {color:fff;font-weight:bold}
+span.cow  {color:ff0;font-weight:bold}
+
+#score 
+{
+margin-top:10px;
+padding-bottom:10px;
+font-weight:bold;
+}	
+#score-left
+{
+float:left;
+margin-left:0px;
+width:100px;
+}
+#score-right
+{
+float:left;
+margin-left:100px;
+width:100px;
+}
+</style>
+</head>
+<body>
+<h1>Terni Lapilli<br />
+<!-- <input type="button" value="Instructions" onclick="showinstructions()" /> -->
+<input type="button" value="New Game" onclick="initGame()" />
+<input type="button" value="Undo" onclick="undoFn()" />
+ </h1>
+<br />
+<br />
+<div id="optionsdiv">
+
+    <form>
+      
+    </form>
+
+</div>
+<br /><br />
+
+<div id="playdiv">
+<script>
+document.write(makePanel(initBdTab))
+</script>
+</div>
+
+
+<div id="messageDiv">
+Messages.
+</div>
+
+<br /><br />
+
+<!-- <div id="score"> -->
+<!-- Score -->
+<!-- </div> -->
+<!-- <div id="score-left"> -->
+<!-- Human: 0  -->
+<!-- </div> -->
+<!-- <div id="score-right"> -->
+<!-- Computer: 0  -->
+<!-- </div> -->
+
+<h5>
+This is a hypothesized reconstruction of the ancient Roman form of Tic-Tac-Toe, which was more interesting than the modern form.  The goal is the same, to get three of your pieces in a row.  But after each player places three pieces on the board, the nature of a move changes: now you must move one of your pieces to an adjacent square.  Any orthogonal (up/down or left/right) direction is permitted, but diagonal moves are only permitted along the two main diagonals - diagonal moves from the middle of one side to the middle of another are not permitted.
+</h5>
+
+</body>
+</html>
+
