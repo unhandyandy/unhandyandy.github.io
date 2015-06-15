@@ -1,0 +1,3 @@
+[submodule "StrategyGames"]
+	path = StrategyGames
+	url = git@github.com:unhandyandy/StrategyGames.git
