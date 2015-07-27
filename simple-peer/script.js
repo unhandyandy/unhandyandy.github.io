@@ -15,9 +15,9 @@ document.querySelector('form').addEventListener('submit', function (ev) {
 
 document.querySelector('#type').addEventListener('input', function (ev) {
   ev.preventDefault()
-  var code = ev.hasOwnProperty('which') ? event.which : event.keyCode
-  if ( code === 13 ){ 
-    var ta = document.querySelector('#type')
+  var ta = document.querySelector('#type')
+  var lastkey = ta.value[-1]
+  if ( lastkey.keycode === 13 ){ 
     var text = ta.value
     ta.value = ""
     document.querySelector('#thread').value += text
