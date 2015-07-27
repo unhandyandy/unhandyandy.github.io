@@ -1,4 +1,4 @@
-var Peer = require('simple-peer')
+var Peer = window.SimplePeer
 var p = new Peer({ initiator: location.hash === '#1', trickle: false })
 
 p.on('error', function (err) { console.log('error', err) })
