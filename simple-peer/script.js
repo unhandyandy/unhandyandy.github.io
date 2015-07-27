@@ -28,5 +28,5 @@ p.on('connect', function () {
 
 p.on('data', function (data) {
   console.log('data: ' + data)
-  document.querySelector('#thread').value += data
+  document.querySelector('#thread').value += "\n\n" + data
 })
