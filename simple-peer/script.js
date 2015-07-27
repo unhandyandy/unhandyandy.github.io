@@ -13,7 +13,7 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   p.signal(JSON.parse(document.querySelector('#incoming').value))
 })
 
-document.querySelector('#type').addEventListener('keypress', function (ev) {
+document.querySelector('#type').addEventListener('input', function (ev) {
   ev.preventDefault()
   var code = ev.hasOwnProperty('which') ? event.which : event.keyCode
   if ( code === 13 ){ 
