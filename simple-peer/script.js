@@ -18,7 +18,7 @@ document.querySelector('#type').addEventListener('keypress', function (ev) {
     var ta = document.querySelector('#type')
     var text = ta.value
     ta.value = ""
-    document.querySelector('#thread').value += text
+    document.querySelector('#thread').value += "\n\n" + text
     p.send(text) }
 })
 
