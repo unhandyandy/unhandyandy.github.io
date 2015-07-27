@@ -13,11 +13,9 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   p.signal(JSON.parse(document.querySelector('#incoming').value))
 })
 
-document.querySelector('#type').addEventListener('input', function (ev) {
-  ev.preventDefault()
-  var ta = document.querySelector('#type')
-  var lastkey = ta.value[-1]
-  if ( lastkey.keycode === 13 ){ 
+document.querySelector('#type').addEventListener('keypress', function (ev) {
+  if ( ev.keyCode === 13 ){ 
+    var ta = document.querySelector('#type')
     var text = ta.value
     ta.value = ""
     document.querySelector('#thread').value += text
