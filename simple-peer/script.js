@@ -13,11 +13,18 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   p.signal(JSON.parse(document.querySelector('#incoming').value))
 })
 
+document.querySelector('#type').addEventListener('input', function (ev) {
+  ev.preventDefault()
+  var text = document.querySelector('#type').value
+  document.querySelector('#thread').value += text
+  p.send(text)
+})
+
 p.on('connect', function () {
   console.log('CONNECT')
-  p.send('whatever' + Math.random())
 })
 
 p.on('data', function (data) {
   console.log('data: ' + data)
+  document.querySelector('#thread').value += data
 })
