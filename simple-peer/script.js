@@ -17,7 +17,7 @@ p.on('signal', function (data) {
 
 document.addEventListener('paste', function(e){
     p.signal(JSON.parse(e.clipboardData.getData('text/plain')))
-}
+})
 
 document.querySelector('form').addEventListener('submit', function (ev) {
   ev.preventDefault()
