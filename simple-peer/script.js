@@ -7,8 +7,8 @@ p.on('error', function (err) { console.log('error', err) })
 
 function sendMail() {
     var link = "mailto:" + escape(document.getElementById('incoming').value) +
-               "&subject=" + escape("Game Invitation") +
-               "&body=" + JSON.stringify(invitation);
+               "?subject=" + escape("Game Invitation") +
+               "?body=" + JSON.stringify(invitation);
     window.location.href = link; }
 
 p.on('signal', function (data) {
