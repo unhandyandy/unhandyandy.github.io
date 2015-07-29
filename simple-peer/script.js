@@ -1,6 +1,6 @@
 var Peer = window.SimplePeer
 var p = new Peer({ initiator: location.hash === '#1', trickle: false })
-var invitation
+var invitation = ""
 var stage = 0
 
 p.on('error', function (err) { console.log('error', err) })
@@ -12,19 +12,19 @@ function sendMail() {
     window.location.href = link; }
 
 p.on('signal', function (data) {
-  console.log('SIGNAL', JSON.stringify(data))
-  invitation = data
+  invitation = JSON.stringify(data)
+  console.log('SIGNAL', invitation)
 })
 document.querySelector('#incoming').addEventListener('input', function (ev) {
   stage = 0
 })
 document.querySelector('form').addEventListener('submit', function (ev) {
   ev.preventDefault()
-  if (stage > 0){
+  if (stage > 0 || invitation === "" ){
     p.signal(JSON.parse(window.clipboardData.getData('Text'))) 
   }else{
-    sendMail()
-    stage += 1}
+    sendMail()}
+  stage += 1  
 })
 
 document.querySelector('#type').addEventListener('keypress', function (ev) {
