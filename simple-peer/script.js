@@ -20,11 +20,17 @@ document.querySelector('#incoming').addEventListener('input', function (ev) {
 })
 document.querySelector('form').addEventListener('submit', function (ev) {
   ev.preventDefault()
-  if (stage > 0 || invitation === "" ){
-    p.signal(JSON.parse(window.clipboardData.getData('Text'))) 
-  }else{
-    sendMail()}
-  stage += 1  
+  if (stage === 0 ){
+      if ( invitation === "" ){
+          p.signal(JSON.parse(window.clipboardData.getData('Text')))
+          stage = 2}
+      else{
+          sendMail()
+          stage = 3 } }
+  else if ( stage === 2){
+      sendMail()}
+  else{
+      p.signal(JSON.parse(window.clipboardData.getData('Text'))) }
 })
 
 document.querySelector('#type').addEventListener('keypress', function (ev) {
