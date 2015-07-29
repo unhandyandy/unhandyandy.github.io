@@ -24,8 +24,8 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   sendMail()
 })
 
-function updateThread( text){
-    document.querySelector('#thread').innerHTML += "<br/><br/>" + text
+function updateThread( text, color ){
+    document.querySelector('#thread').innerHTML += "<br/><br/>" + "<span style='color:" + color + "'>" + text + "</span>"
 }
 
 document.querySelector('#type').addEventListener('keypress', function (ev) {
@@ -33,7 +33,7 @@ document.querySelector('#type').addEventListener('keypress', function (ev) {
     var ta = document.querySelector('#type')
     var text = ta.value
     ta.value = ""
-    updateThread( text )
+    updateThread( text, "black" )
     p.send(text) }
 })
 
@@ -43,5 +43,5 @@ p.on('connect', function () {
 
 p.on('data', function (data) {
   console.log('data: ' + data)
-  updateThread( data )
+  updateThread( data, "blue" )
 })
