@@ -24,12 +24,16 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   sendMail()
 })
 
+function updateThread( text){
+    document.querySelector('#thread').innerHTML += "<br/><br/>" + text
+}
+
 document.querySelector('#type').addEventListener('keypress', function (ev) {
   if ( ev.keyCode === 13 ){ 
     var ta = document.querySelector('#type')
     var text = ta.value
     ta.value = ""
-    document.querySelector('#thread').value += "\n\n" + text
+    updateThread( text )
     p.send(text) }
 })
 
@@ -39,5 +43,5 @@ p.on('connect', function () {
 
 p.on('data', function (data) {
   console.log('data: ' + data)
-  document.querySelector('#thread').innerHTML += "<br/><br/>" + data
+  updateThread( data )
 })
