@@ -22,7 +22,7 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   ev.preventDefault()
   if (stage === 0 ){
       if ( invitation === "" ){
-          p.signal(JSON.parse(window.clipboardData.getData('Text')))
+          p.signal(JSON.parse(ClipboardEvent.clipboardData))
           stage = 2}
       else{
           sendMail()
@@ -30,7 +30,7 @@ document.querySelector('form').addEventListener('submit', function (ev) {
   else if ( stage === 2){
       sendMail()}
   else{
-      p.signal(JSON.parse(window.clipboardData.getData('Text'))) }
+      p.signal(JSON.parse(ClipboardEvent.clipboardData)) }
 })
 
 document.querySelector('#type').addEventListener('keypress', function (ev) {
