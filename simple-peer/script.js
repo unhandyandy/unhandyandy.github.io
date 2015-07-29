@@ -15,9 +15,6 @@ p.on('signal', function (data) {
   invitation = JSON.stringify(data)
   console.log('SIGNAL', invitation)
 })
-document.querySelector('#incoming').addEventListener('input', function (ev) {
-  stage = 0
-})
 document.querySelector('form').addEventListener('submit', function (ev) {
   ev.preventDefault()
   if (stage === 0 ){
