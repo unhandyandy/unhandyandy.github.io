@@ -1,4 +1,6 @@
 <html>
+    <script src="simplepeer.min.js"></script>
+    <script src="script.js"></script>
   <body>
     <style>
       #outgoing {
@@ -7,16 +9,12 @@
       }
     </style>
     <form>
-      <textarea id="incoming"></textarea>
+      <label>Eamil Address<textarea id="emailAddr"></textarea></label>
       <button type="submit">Invitation</button>
+      <textarea id="signal"></textarea>
     </form>
-    <pre id="outgoing"></pre>
-
        <div id="thread"></div>
        <br/><br/>
        <textarea id="type"></textarea>
-   
-    <script src="simplepeer.min.js"></script>
-    <script src="script.js"></script>
-  </body>
+     </body>
 </html>
