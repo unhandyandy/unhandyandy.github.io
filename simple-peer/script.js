@@ -5,7 +5,7 @@ var invitation = ""
 p.on('error', function (err) { console.log('error', err) })
 
 function sendMail() {
-    var link = "mailto:" + escape(document.getElementById('incoming').value) +
+    var link = "mailto:" + escape(document.getElementById('emailAddr').value) +
                "?subject=" + escape("Game Invitation") +
                "&body=" + JSON.stringify(invitation);
     window.location.href = link; }
@@ -15,7 +15,7 @@ p.on('signal', function (data) {
   console.log('SIGNAL', invitation)
 })
 
-document.addEventListener('paste', function(e){
+document.getElementById('signal').addEventListener('paste', function(e){
     p.signal(JSON.parse(e.clipboardData.getData('text/plain')))
 })
 
