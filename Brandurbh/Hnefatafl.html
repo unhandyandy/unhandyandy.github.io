@@ -340,7 +340,7 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
   }
   kk+=nn;
   // check for King's vulnerability?
-  if ((ii==0)||(ii==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],2,ll))
+  if ((ii==0)||(ii==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],0,ll))
   { vv++; 
     if (kk==0) vv+=100;
     if (kk==1) vv+=99*(1-cc)+1;
@@ -370,7 +370,7 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     }
   }   
   kk+=nn;  
-  if ((jj==0)||(jj==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],2,ll))
+  if ((jj==0)||(jj==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],0,ll))
   { vv++;    
     if (kk==0) vv+=100;
     if (kk==1) vv+=99*(1-cc)+1;
