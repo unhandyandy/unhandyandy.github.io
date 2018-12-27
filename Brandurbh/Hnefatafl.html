@@ -303,13 +303,13 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     }
   }
   // check for pawn captures
-  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&((sign(GetFld(ii1+2,jj1,ll))==cc)||IsHostile(ii1+2,jj1)))
+  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&((sign(GetFld(ii1+2,jj1,ll))==cc)||IsHostile(ii1+2,jj1,cc,ll)))
     Fld[ii1+1][jj1][ll]=-1;
-  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&((sign(GetFld(ii1-2,jj1,ll))==cc)||IsHostile(ii1-2,jj1)))
+  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&((sign(GetFld(ii1-2,jj1,ll))==cc)||IsHostile(ii1-2,jj1,cc,ll)))
     Fld[ii1-1][jj1][ll]=-1;
-  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&((sign(GetFld(ii1,jj1+2,ll))==cc)||IsHostile(ii1,jj1+2)))
+  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&((sign(GetFld(ii1,jj1+2,ll))==cc)||IsHostile(ii1,jj1+2,cc,ll)))
     Fld[ii1][jj1+1][ll]=-1;
-  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&((sign(GetFld(ii1,jj1-2,ll))==cc)||IsHostile(ii1,jj1-2)))
+  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&((sign(GetFld(ii1,jj1-2,ll))==cc)||IsHostile(ii1,jj1-2,cc,ll)))
     Fld[ii1][jj1-1][ll]=-1;
 //The computer strength can probably be improved 
 //by carefully adapting the parameters.
@@ -529,7 +529,7 @@ function CanMoveTo(ii0, jj0, cc0, ll)
   return(0);  
 }
 
-function IsHostile(ii, jj)
+function IsHostile(ii, jj,cc,ll)
 { if (ii==0)
   { if (jj==0) return(2);
     if (jj==Size-1) return(2);
@@ -541,7 +541,7 @@ function IsHostile(ii, jj)
     return(0);
   } 
   if ((ii==Center)&&(jj==Center))
-    return(1);
+    return(sign(GetFld(Center,Center,ll))==sign(cc)||GetFld(Center,Center,ll)==-1);
   return(0);  
 }
   
