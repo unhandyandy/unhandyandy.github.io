@@ -1,0 +1,856 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta name="description" content="Hnefatafl written in HTML and JavaScript by adapting the code of Checkers">
+<meta name="author" content="Lutz Tautenhahn">
+<meta name="keywords" content="Hnefatafl, Tablut, JavaScript">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Hnefatafl</title>
+<script language="JavaScript">
+var i, j, k, Start, Start0=true, MoveCount, MaxMoveCount, MaxMove=490, MaxSize=11, Size=7;
+var I_Sel0, J_Sel0, I_Sel1, J_Sel1, IsOver=true, Center, Rand=0; 
+IsPlayer = new Array(2);
+IsPlayer[0]=1;
+IsPlayer[1]=0;
+Fld = new Array(MaxSize);
+for (i=0; i < MaxSize; i++)
+  Fld[i]=new Array(MaxSize); 
+for (i=0; i < MaxSize; i++)
+{ for (j=0; j < MaxSize; j++)
+    Fld[i][j]=new Array(2); 
+}
+King = new Array(2);
+for (i=0; i<2; i++)
+  King[i]=new Array(2);
+History=new Array(MaxMove);
+for (i=0; i<MaxMove; i++) History[i]=new Array();
+Pic= new Array(5);
+for (i=0; i<5; i++)
+  Pic[i]=new Array(2);
+for (i=0; i<5; i++)
+{ for (j=0; j<2; j++) 
+  { Pic[i][j] = new Image();
+    Pic[i][j].src = "hnefatafl"+i+j+".gif";
+  }
+}
+Transparent=new Image();
+if (document.layers)
+  Transparent.src="hnefatafln4.gif";
+else
+  Transparent.src="transparent.gif";
+
+function Init()
+// dd = width of start formation
+{ var ii, jj, dd=1;
+  if (Size==11) dd=2;
+  if (Size==7) dd=0;
+  if (Start0) Start=0;
+  else Start=1;
+  Rand=1-Rand;
+  MoveCount=0;
+  MaxMoveCount=0;
+  Center=(Size-1)/2;
+  for (ii=0; ii < Size; ii++)
+  { for (jj=0; jj < Size; jj++)
+      Fld[ii][jj][0]=-1;
+  }
+  for (ii=Center-dd; ii<=Center+dd; ii++)
+  { Fld[0][ii][0]=0;
+    Fld[Size-1][ii][0]=0;
+    Fld[ii][0][0]=0;
+    Fld[ii][Size-1][0]=0;
+  }
+  Fld[1][Center][0]=0;
+  Fld[Size-2][Center][0]=0;
+  Fld[Center][1][0]=0;
+  Fld[Center][Size-2][0]=0;
+  
+  if (Size==11)
+  { if (Rand==0)
+    { for (ii=Center-1; ii<=Center+1; ii++)
+      { for (jj=Center-1; jj<=Center+1; jj++)
+          Fld[ii][jj][0]=1;
+      }
+    }
+    else if (Size==7)
+{ Fld[Center-2][Center][0]=1;
+      Fld[Center+2][Center][0]=1;
+      Fld[Center][Center-2][0]=1;
+      Fld[Center][Center+2][0]=1;
+    }
+        else
+    { Fld[Center-3][Center][0]=1;
+      Fld[Center+3][Center][0]=1;
+      Fld[Center][Center-3][0]=1;
+      Fld[Center][Center+3][0]=1;
+    }
+  }
+  if (Size==7)
+for (ii=Center-1; ii<=Center+1; ii++)
+  { Fld[ii][Center][0]=1;
+    Fld[Center][ii][0]=1;
+  }
+      else
+  for (ii=Center-2; ii<=Center+2; ii++)
+  { Fld[ii][Center][0]=1;
+    Fld[Center][ii][0]=1;
+  }  
+  Fld[Center][Center][0]=2;
+  King[0][0]=Center;
+  King[1][0]=Center;
+  I_Sel0=-1; J_Sel0=-1; 
+  I_Sel1=-1; J_Sel1=-1; 
+  IsOver=false;
+  RefreshScreen();
+  window.document.OptionsForm.Moves.value=" 0 ";
+}
+function SetSize(ss)
+{ Size=parseInt(ss);
+  Init();
+}
+function SetPlayer(nn, mm)
+{ IsPlayer[nn]=mm;
+}
+function SetStart0(bb)
+{ Start0=bb;
+}
+function Timer()
+{ if (IsOver) return;
+  var mm=(MoveCount+Start)%2;
+  if (I_Sel1>=0) { MakeMove(); return; }
+  if (IsPlayer[mm]) return;
+  GetBestMove(mm);
+  if (I_Sel0>=0) RefreshFld(I_Sel0, J_Sel0);
+}
+
+function Back()
+{ if (MoveCount==0) return;
+  if (I_Sel1>=0) return;
+  IsOver=false;
+  MoveCount--;
+  var nn, mm, ii, jj;
+  ii=History[MoveCount][0];
+  jj=History[MoveCount][1];
+  nn=History[MoveCount][2];
+  mm=History[MoveCount][3];    
+  Fld[ii][jj][0]=Fld[nn][mm][0];
+  Fld[nn][mm][0]=-1;
+  if (Fld[ii][jj][0]==2)
+  { King[0][0]=ii;
+    King[1][0]=jj;
+  }
+  for (nn=4; nn<History[MoveCount].length; nn+=3)
+  { ii=History[MoveCount][nn];
+    jj=History[MoveCount][nn+1];
+    Fld[ii][jj][0]=History[MoveCount][nn+2];
+  }
+  RefreshScreen();
+}
+function Replay()
+{ if (I_Sel1>=0) return;
+  if (MoveCount<MaxMoveCount)
+  { I_Sel0=History[MoveCount][0];
+    J_Sel0=History[MoveCount][1];
+    I_Sel1=History[MoveCount][2];
+    J_Sel1=History[MoveCount][3];    
+    MakeMove();
+  }
+}
+
+// cc = player
+// 
+function GetBestMove(cc)
+{ var ii, jj, ii0=-1, jj0, ii1, jj1, kk, vv, cc1=1-cc, vv_best=-10000;
+  for (ii=0; ii<Size; ii++)
+  { for (jj=0; jj<Size; jj++)
+    { if (Fld[ii][jj][0]==cc)
+      { kk=1;
+        while (GetFld(ii+kk, jj, 0)==-1)
+        { if (!IsHostile(ii+kk, jj))
+          { vv=MakeVirtualMove(ii,jj,ii+kk,jj,cc,1);
+            if (vv>vv_best)
+            { vv_best=vv; ii0=ii; jj0=jj; ii1=ii+kk; jj1=jj;
+            }
+          }  
+          kk++;
+        }
+        kk=1;
+        while (GetFld(ii-kk, jj, 0)==-1)
+        { if (!IsHostile(ii-kk, jj))
+          { vv=MakeVirtualMove(ii,jj,ii-kk,jj,cc,1);
+            if (vv>vv_best)
+            { vv_best=vv; ii0=ii; jj0=jj; ii1=ii-kk; jj1=jj;
+            }
+          }  
+          kk++;
+        }
+        kk=1;
+        while (GetFld(ii, jj+kk, 0)==-1)
+        { if (!IsHostile(ii, jj+kk))
+          { vv=MakeVirtualMove(ii,jj,ii,jj+kk,cc,1);
+            if (vv>vv_best)
+            { vv_best=vv; ii0=ii; jj0=jj; ii1=ii; jj1=jj+kk;
+            }
+          }
+          kk++;
+        }
+        kk=1;
+        while (GetFld(ii, jj-kk, 0)==-1)
+        { if (!IsHostile(ii, jj-kk))
+          { vv=MakeVirtualMove(ii,jj,ii,jj-kk,cc,1);
+            if (vv>vv_best)
+            { vv_best=vv; ii0=ii; jj0=jj; ii1=ii; jj1=jj-kk;
+            }
+          }
+          kk++;
+        }     
+      }
+    }
+  }
+  if (cc==1)
+  { ii=King[0][0];
+    jj=King[1][0];
+    kk=1;
+    while(GetFld(ii+kk, jj, 0)==-1)
+    { vv=MakeVirtualMove(ii,jj,ii+kk,jj,cc,1);
+      if (vv>vv_best)
+      { vv_best=vv; ii0=ii; jj0=jj; ii1=ii+kk; jj1=jj;
+      }
+      kk++;
+    }
+    kk=1;
+    while(GetFld(ii-kk, jj, 0)==-1)
+    { vv=MakeVirtualMove(ii,jj,ii-kk,jj,cc,1);
+      if (vv>vv_best)
+      { vv_best=vv; ii0=ii; jj0=jj; ii1=ii-kk; jj1=jj;
+      }
+      kk++;
+    }
+    kk=1;
+    while(GetFld(ii, jj+kk, 0)==-1)
+    { vv=MakeVirtualMove(ii,jj,ii,jj+kk,cc,1);
+      if (vv>vv_best)
+      { vv_best=vv; ii0=ii; jj0=jj; ii1=ii; jj1=jj+kk;
+      }
+      kk++;
+    }
+    kk=1;
+    while(GetFld(ii, jj-kk, 0)==-1)
+    { vv=MakeVirtualMove(ii,jj,ii,jj-kk,cc,1);
+      if (vv>vv_best)
+      { vv_best=vv; ii0=ii; jj0=jj; ii1=ii; jj1=jj-kk;
+      }
+      kk++;
+    }           
+  }
+  if (ii0>=0)
+  { I_Sel0=ii0;
+    J_Sel0=jj0;
+    I_Sel1=ii1;
+    J_Sel1=jj1;
+  }
+  else
+  { IsOver=true;
+    alert("It's a stalemate.");
+  }  
+}
+
+function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
+{ var ii, jj, vv=0, kk=0, nn;
+  for (ii=0; ii<Size; ii++)
+  { for (jj=0; jj<Size; jj++)
+      Fld[ii][jj][ll]=Fld[ii][jj][ll-1];
+  }
+  if (Fld[ii0][jj0][ll]==2)
+  { if (IsHostile(ii1, jj1)==2)
+      return(1000-Math.random()-ll);
+    King[0][ll]=ii1;
+    King[1][ll]=jj1;  
+  }
+  else
+  { King[0][ll]=King[0][ll-1];
+    King[1][ll]=King[1][ll-1];
+  }
+  Fld[ii1][jj1][ll]=Fld[ii0][jj0][ll];
+  Fld[ii0][jj0][ll]=-1;
+  if (cc==0)
+      //check for king capture
+  { ii=ii1; jj=jj1;
+    if (GetFld(ii1+1,jj1,ll)==2) ii++;
+    if (GetFld(ii1,jj1+1,ll)==2) jj++;
+    if (GetFld(ii1-1,jj1,ll)==2) ii--;
+    if (GetFld(ii1,jj1-1,ll)==2) jj--;
+    if ((ii!=ii1)||(jj!=jj1))  
+    { if (Math.abs(ii-Center)+Math.abs(jj-Center)==0)
+      { if ((Fld[ii-1][jj][ll]==0)&&
+            (Fld[ii+1][jj][ll]==0)&&
+            (Fld[ii][jj-1][ll]==0)&&
+            (Fld[ii][jj+1][ll]==0))
+          return(1000-Math.random()-ll);
+      }
+      else
+      { if (Math.abs(ii-Center)+Math.abs(jj-Center)==1)
+        { if (Fld[ii-1][jj][ll]==0) kk++;
+          if (Fld[ii+1][jj][ll]==0) kk++;
+          if (Fld[ii][jj-1][ll]==0) kk++;
+          if (Fld[ii][jj+1][ll]==0) kk++;
+          if (kk==3) return(1000+Math.random()-ll);
+        }
+        else
+        { if ((GetFld(2*ii-ii1,2*jj-jj1,ll)==0)||(IsHostile(2*ii-ii1,2*jj-jj1)))
+            return(1000-Math.random()-ll);
+        }      
+      }
+    }
+  }
+  // check for pawn captures
+  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&((sign(GetFld(ii1+2,jj1,ll))==cc)||IsHostile(ii1+2,jj1)))
+    Fld[ii1+1][jj1][ll]=-1;
+  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&((sign(GetFld(ii1-2,jj1,ll))==cc)||IsHostile(ii1-2,jj1)))
+    Fld[ii1-1][jj1][ll]=-1;
+  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&((sign(GetFld(ii1,jj1+2,ll))==cc)||IsHostile(ii1,jj1+2)))
+    Fld[ii1][jj1+1][ll]=-1;
+  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&((sign(GetFld(ii1,jj1-2,ll))==cc)||IsHostile(ii1,jj1-2)))
+    Fld[ii1][jj1-1][ll]=-1;
+//The computer strength can probably be improved 
+//by carefully adapting the parameters.
+  vv=0;
+  ii=King[0][ll];
+  // check for occupied squares in row or col of King
+  kk=0;
+  for (jj=0; jj<King[1][ll]; jj++)
+  { if (Fld[ii][jj][ll]>=0) kk++; }
+  if (kk>=1) kk=1;
+  else
+  { if ((ii==1)&&(Fld[2][0][ll]>=0)) vv+=90+cc*85*(Fld[2][0][ll]-1);
+    if ((ii==Size-2)&&(Fld[Size-3][0][ll]>=0)) vv+=90+cc*85*(Fld[Size-3][0][ll]-1);
+    if (((ii!=1)||(!CanMoveTo(2,0,0,ll)))&&((ii!=Size-2)||(!CanMoveTo(Size-3,0,0,ll))))
+    {  if(CanMoveFromTo(0,0,Size-2,0,ll)) vv+=90-cc*85;
+    }
+  }  
+  nn=0;
+  for (jj=King[1][ll]+1; jj<Size; jj++)
+  { if (Fld[ii][jj][ll]>=0) nn++; }
+  if (nn>=1) nn=1;
+  else
+  { if ((ii==1)&&(Fld[2][Size-1][ll]>=0)) vv+=90+cc*85*(Fld[2][Size-1][ll]-1);
+    if ((ii==Size-2)&&(Fld[Size-3][Size-1][ll]>=0)) vv+=90+cc*85*(Fld[Size-3][Size-1][ll]-1);
+    if (((ii!=1)||(!CanMoveTo(2,Size-1,0,ll)))&&((ii!=Size-2)||(!CanMoveTo(Size-3,Size-1,0,ll))))    
+    { if (CanMoveFromTo(0,Size-1,Size-2,Size-1,ll)) vv+=90-cc*85;
+    }
+  }
+  kk+=nn;
+  // check for King's vulnerability?
+  if ((ii==0)||(ii==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],2,ll))
+  { vv++; 
+    if (kk==0) vv+=100;
+    if (kk==1) vv+=99*(1-cc)+1;
+  }
+  else vv-=kk*2;
+  jj=King[1][ll];
+  kk=0;
+  for (ii=0; ii<King[0][ll]; ii++)
+  { if (Fld[ii][jj][ll]>=0) kk++; }
+  if (kk>=1) kk=1;
+  else
+  { if ((jj==1)&&(Fld[0][2][ll]>=0)) vv+=90+cc*85*(Fld[0][2][ll]-1);
+    if ((jj==Size-2)&&(Fld[0][Size-3][ll]>=0)) vv+=90+cc*85*(Fld[0][Size-3][ll]-1);
+    if (((jj!=1)||(!CanMoveTo(0,2,0,ll)))&&((jj!=Size-2)||(!CanMoveTo(0,Size-3,0,ll))))
+    { if (CanMoveFromTo(0,0,0,Size-2,ll)) vv+=90-cc*85;
+    }
+  }    
+  nn=0;
+  for (ii=King[0][ll]+1; ii<Size; ii++)
+  { if (Fld[ii][jj][ll]>=0) nn++; }
+  if (nn>=1) nn=1;
+  else
+  { if ((jj==1)&&(Fld[Size-1][2][ll]>=0)) vv+=90+cc*85*(Fld[Size-1][2][ll]-1);
+    if ((jj==Size-2)&&(Fld[Size-1][Size-3][ll]>=0)) vv+=90+cc*85*(Fld[Size-1][Size-3][ll]-1);
+    if (((jj!=1)||(!CanMoveTo(Size-1,2,0,ll)))&&((jj!=Size-2)||(!CanMoveTo(Size-1,Size-3,0,ll))))
+    { if (CanMoveFromTo(Size-1,0,Size-1,Size-2,ll)) vv+=90-cc*85;        
+    }
+  }   
+  kk+=nn;  
+  if ((jj==0)||(jj==Size-1) && !IsVulnerable(King[0][ll],King[1][ll],2,ll))
+  { vv++;    
+    if (kk==0) vv+=100;
+    if (kk==1) vv+=99*(1-cc)+1;
+  }
+  else vv-=kk;  
+  ii=King[0][ll];
+  if (((ii==0)||(ii==Size-1))&&((jj==1)||(jj==Size-2))) vv+=40;
+  if (((ii==1)||(ii==Size-2))&&((jj==0)||(jj==Size-1))) vv+=40;
+  kk=0;
+  if (Math.abs(ii-Center)+Math.abs(jj-Center)<=1)
+  { if ((Fld[ii+1][jj][ll]==0)||(ii+1==Center)) kk++; else nn=0;
+    if ((Fld[ii-1][jj][ll]==0)||(ii-1==Center)) kk++; else nn=1;
+    if ((Fld[ii][jj+1][ll]==0)||(jj+1==Center)) kk++; else nn=2;
+    if ((Fld[ii][jj-1][ll]==0)||(jj-1==Center)) kk++; else nn=3;
+    if (kk==3)
+    { if ((nn==0)&&(Fld[ii+1][jj][ll]==-1)) vv-=100*CanMoveTo(ii+1,jj,0,ll)*(cc+0.05);
+      if ((nn==1)&&(Fld[ii-1][jj][ll]==-1)) vv-=100*CanMoveTo(ii-1,jj,0,ll)*(cc+0.05);
+      if ((nn==2)&&(Fld[ii][jj+1][ll]==-1)) vv-=100*CanMoveTo(ii,jj+1,0,ll)*(cc+0.05);
+      if ((nn==3)&&(Fld[ii][jj-1][ll]==-1)) vv-=100*CanMoveTo(ii,jj-1,0,ll)*(cc+0.05);
+    }
+  }
+  else
+  { if ((GetFld(ii+1,jj,ll)==0)||IsHostile(ii+1,jj)) kk++; else nn=0;
+    if ((GetFld(ii-1,jj,ll)==0)||IsHostile(ii-1,jj)) kk++; else nn=1;
+    if (kk==1)
+    { if ((nn==0)&&(GetFld(ii+1,jj,ll)==-1)) vv-=100*CanMoveTo(ii+1,jj,0,ll)*(cc+0.05);
+      if ((nn==1)&&(GetFld(ii-1,jj,ll)==-1)) vv-=100*CanMoveTo(ii-1,jj,0,ll)*(cc+0.05);
+    }
+    if (kk==2)
+    { if ((IsHostile(ii+1,jj))||(IsHostile(ii-1,jj))) vv+=200;
+    }
+    kk=0;
+    if ((GetFld(ii,jj+1,ll)==0)||IsHostile(ii,jj+1)) kk++; else nn=0;
+    if ((GetFld(ii,jj-1,ll)==0)||IsHostile(ii,jj-1)) kk++; else nn=1;
+    if (kk==1)
+    { if ((nn==0)&&(GetFld(ii,jj+1,ll)==-1)) vv-=100*CanMoveTo(ii,jj+1,0,ll)*(cc+0.05);
+      if ((nn==1)&&(GetFld(ii,jj-1,ll)==-1)) vv-=100*CanMoveTo(ii,jj-1,0,ll)*(cc+0.05);
+    }
+    if (kk==2)
+    { if ((IsHostile(ii,jj+1))||(IsHostile(ii,jj-1))) vv+=200;
+    }        
+  }
+  
+  if (cc==0) vv*=-0.5;
+  for (ii=0; ii<Size; ii++)
+  { nn=0;
+    for (jj=0; jj<Size; jj++)
+    { kk=Fld[ii][jj][ll];
+      if (kk==cc) vv+=10-3*IsVulnerable(ii, jj, 1-cc, ll);
+      if (kk==1-cc) vv-=10-IsVulnerable(ii, jj, cc, ll);
+      if (kk==0) nn++;
+    }
+    if (nn==0) vv+=cc;
+    else vv+=(1-cc)*(1+nn/4);
+  }
+  for (jj=0; jj<Size; jj++)
+  { nn=0;
+    for (ii=0; ii<Size; ii++)
+    { if (Fld[ii][jj][ll]==0) nn++;
+    }
+    if (nn==0) vv+=cc;
+    else vv+=(1-cc)*(1+nn/4);
+  }
+  if (MoveCount>7)
+  { if(((History[MoveCount-4][0]==ii0)&&
+        (History[MoveCount-4][1]==jj0)&&
+        (History[MoveCount-4][2]==History[MoveCount-2][0])&&
+        (History[MoveCount-4][3]==History[MoveCount-2][1]))||
+       ((History[MoveCount-8][0]==ii0)&&
+        (History[MoveCount-8][1]==jj0)&&
+        (History[MoveCount-8][2]==ii1)&&
+        (History[MoveCount-8][3]==jj1))) vv-=3;
+  }
+  vv+=Math.random()/4;
+  return(vv);
+}
+
+function IsVulnerable(ii1, jj1, cc, ll)
+{ var kk, nn;
+  kk=GetFld(ii1+1,jj1,ll);
+  nn=GetFld(ii1-1,jj1,ll);
+  if ((nn==-1)&&((sign(kk)==cc)||IsHostile(ii1+1,jj1)))
+  { if (CanMoveTo(ii1-1, jj1, cc, ll)) return(1);
+  }
+  if ((kk==-1)&&((sign(nn)==cc)||IsHostile(ii1-1,jj1)))
+  { if (CanMoveTo(ii1+1, jj1, cc, ll)) return(1);
+  }
+  kk=GetFld(ii1,jj1+1,ll);
+  nn=GetFld(ii1,jj1-1,ll);
+  if ((nn==-1)&&((sign(kk)==cc)||IsHostile(ii1,jj1+1)))
+  { if (CanMoveTo(ii1, jj1-1, cc, ll)) return(1);
+  }
+  if ((kk==-1)&&((sign(nn)==cc)||IsHostile(ii1,jj1-1)))
+  { if (CanMoveTo(ii1, jj1+1, cc, ll)) return(1);
+  }
+  return(0);
+}
+
+function CanMoveFromTo(ii0, jj0, ii1, jj1, ll)
+{ var kk;
+  if ((ii0!=ii1)&&(jj0!=jj1)) return(0);
+  if (ii0<ii1)
+  { for (kk=ii0+1; kk<=ii1; kk++)
+    { if (Fld[kk][jj0][ll]!=-1) return(0);
+    }
+    return(1);
+  }  
+  if (ii0>ii1)
+  { for (kk=ii0-1; kk>=ii1; kk--)
+    { if (Fld[kk][jj0][ll]!=-1) return(0);
+    }
+    return(1);
+  } 
+  if (jj0<jj1)
+  { for (kk=jj0+1; kk<=jj1; kk++)
+    { if (Fld[ii0][kk][ll]!=-1) return(0);
+    }
+    return(1);
+  } 
+  if (jj0>jj1)
+  { for (kk=jj0-1; kk>=jj1; kk--)
+    { if (Fld[ii0][kk][ll]!=-1) return(0);
+    }
+    return(1);
+  }  
+  return(0);
+}  
+
+// check if a piece can move to target square
+function CanMoveTo(ii0, jj0, cc0, ll)
+{ var bb, cc, ii, jj;
+  bb=true;
+  for (ii=ii0+1; (ii<Size)&&bb; ii++)
+  { cc=sign(Fld[ii][jj0][ll]);
+    if (cc==cc0) return(1);
+    if (cc!=-1) bb=false;
+  } 
+  bb=true;
+  for (ii=ii0-1; (ii>=0)&&bb; ii--)
+  { cc=sign(Fld[ii][jj0][ll]);
+    if (cc==cc0) return(1);
+    if (cc!=-1) bb=false;
+  }   
+  bb=true;
+  for (jj=jj0+1; (jj<Size)&&bb; jj++)
+  { cc=sign(Fld[ii0][jj][ll]);
+    if (cc==cc0) return(1);
+    if (cc!=-1) bb=false;
+  } 
+  bb=true;
+  for (jj=jj0-1; (jj>=0)&&bb; jj--)
+  { cc=sign(Fld[ii0][jj][ll]);
+    if (cc==cc0) return(1);
+    if (cc!=-1) bb=false;
+  }
+  return(0);  
+}
+
+function IsHostile(ii, jj)
+{ if (ii==0)
+  { if (jj==0) return(2);
+    if (jj==Size-1) return(2);
+    return(0);
+  }  
+  if (ii==Size-1)
+  { if (jj==0) return(2);
+    if (jj==Size-1) return(2);
+    return(0);
+  } 
+  if ((ii==Center)&&(jj==Center))
+    return(1);
+  return(0);  
+}
+  
+function MakeMove()
+{ var ii, jj, vv1, vv2, hh=0;
+  Fld[I_Sel1][J_Sel1][0]=Fld[I_Sel0][J_Sel0][0];
+  Fld[I_Sel0][J_Sel0][0]=-1;
+  RefreshFld(I_Sel0, J_Sel0);
+  RefreshFld(I_Sel1, J_Sel1);
+  if ((History[MoveCount][0]!=I_Sel0)||
+      (History[MoveCount][1]!=J_Sel0)||
+      (History[MoveCount][2]!=I_Sel1)||
+      (History[MoveCount][3]!=J_Sel1))
+  { History[MoveCount][0]=I_Sel0;
+    History[MoveCount][1]=J_Sel0;
+    History[MoveCount][2]=I_Sel1;
+    History[MoveCount][3]=J_Sel1;
+    History[MoveCount].length=4;
+    hh=4;
+    MaxMoveCount=MoveCount+1;
+  }  
+  if (MoveCount<9)
+    window.document.OptionsForm.Moves.value=" "+eval(MoveCount+1)+" ";
+  else
+    window.document.OptionsForm.Moves.value=eval(MoveCount+1);
+  if (Fld[I_Sel1][J_Sel1][0]==2)
+  { King[0][0]=I_Sel1;
+    King[1][0]=J_Sel1;
+  }  
+  if (Fld[I_Sel1][J_Sel1][0]==0)
+  { for (ii=-1; ii<=1; ii++)
+    { for (jj=-1; jj<=1; jj++)
+      { if ((ii+jj+2)%2==1)
+        { vv1=GetFld(I_Sel1+ii, J_Sel1+jj, 0);
+          if (vv1>0)
+          { vv2=GetFld(I_Sel1+2*ii, J_Sel1+2*jj, 0);
+            if ((vv1==1)||(Math.abs(I_Sel1+ii-Center)+Math.abs(J_Sel1+jj-Center)>1))
+            { if ((vv2==0)||(IsHostile(I_Sel1+2*ii, J_Sel1+2*jj)))
+              { if (vv1==2) 
+                { IsOver=true;
+                  setTimeout("alert('Black has won !')",100);
+                }
+                else
+                { Fld[I_Sel1+ii][J_Sel1+jj][0]=-1;
+                  RefreshFld(I_Sel1+ii, J_Sel1+jj);
+                  if (hh>0)
+                  { History[MoveCount][hh]=I_Sel1+ii;
+                    History[MoveCount][hh+1]=J_Sel1+jj;
+                    History[MoveCount][hh+2]=vv1;
+                    hh+=3;
+                  }
+                }
+              } 
+            }
+            else
+            { if (((Fld[I_Sel1+ii-1][J_Sel1+jj][0]==0)||((I_Sel1+ii-1==Center)&&(J_Sel1+jj==Center)))&&
+                  ((Fld[I_Sel1+ii+1][J_Sel1+jj][0]==0)||((I_Sel1+ii+1==Center)&&(J_Sel1+jj==Center)))&&
+                  ((Fld[I_Sel1+ii][J_Sel1+jj-1][0]==0)||((I_Sel1+ii==Center)&&(J_Sel1+jj-1==Center)))&&
+                  ((Fld[I_Sel1+ii][J_Sel1+jj+1][0]==0)||((I_Sel1+ii==Center)&&(J_Sel1+jj+1==Center))))
+              { IsOver=true;
+                setTimeout("alert('Black has won !')",100);
+              }  
+            }
+          }
+        }
+      }
+    }    
+  }
+  else
+  { for (ii=-1; ii<=1; ii++)
+    { for (jj=-1; jj<=1; jj++)
+      { if ((ii+jj+2)%2==1)
+        { if (GetFld(I_Sel1+ii, J_Sel1+jj, 0)==0)
+          { vv2=GetFld(I_Sel1+2*ii, J_Sel1+2*jj, 0);
+            if ((vv2>0)||(IsHostile(I_Sel1+2*ii, J_Sel1+2*jj)))
+            { Fld[I_Sel1+ii][J_Sel1+jj][0]=-1;
+              RefreshFld(I_Sel1+ii, J_Sel1+jj);
+              if (hh>0)
+              { History[MoveCount][hh]=I_Sel1+ii;
+                History[MoveCount][hh+1]=J_Sel1+jj;
+                History[MoveCount][hh+2]=0;
+                hh+=3;
+              }   
+            }
+          }    
+        }
+      }
+    }    
+    if ((Fld[I_Sel1][J_Sel1][0]==2)&&(IsHostile(I_Sel1, J_Sel1)==2))
+    { IsOver=true;
+      setTimeout("alert('White has won !')",100);
+    } 
+  }  
+  I_Sel0=-1;
+  J_Sel0=-1;
+  I_Sel1=-1;
+  J_Sel1=-1;
+  MoveCount++;
+  if (MaxMoveCount<MoveCount)
+    MaxMoveCount=MoveCount;
+  if (MoveCount==MaxMove)
+  { IsOver=true;
+    alert("It's a stalemate.");
+  }        
+  if ((IsOver)||(MoveCount<12)) return;
+  for (ii=0; ii<8; ii++)
+  { if ((History[MoveCount-1-ii][0]!=History[MoveCount-5-ii][0])||
+        (History[MoveCount-1-ii][1]!=History[MoveCount-5-ii][1])||
+        (History[MoveCount-1-ii][2]!=History[MoveCount-5-ii][2])||
+        (History[MoveCount-1-ii][3]!=History[MoveCount-5-ii][3])) return;
+  }      
+  IsOver=true;
+  alert("It's a stalemate.");  
+}
+function GetFld(nn, mm, ll)
+{ if (nn<0) return(-2);
+  if (mm<0) return(-2);
+  if (nn>Size-1) return(-2);
+  if (mm>Size-1) return(-2);
+  return(Fld[nn][mm][ll]);
+}
+function sign(nn)
+{ if (nn<0) return(-1);
+  if (nn>0) return(1);
+  return(0);
+}
+function Clicked(nn, mm)
+{ if (IsOver) return;
+  var cc=(MoveCount+Start)%2;
+  if (! IsPlayer[cc]) return;
+  if (I_Sel1>0) return;
+  var dd=(MaxSize-Size)/2, ii=nn-dd, jj=mm-dd;
+  if ((ii<0)||(jj<0)||(ii>Size-1)||(jj>Size-1))
+    return;
+  if (I_Sel0<0)
+  { if (sign(Fld[ii][jj][0])!=cc) return;
+    I_Sel0=ii;
+    J_Sel0=jj;
+    RefreshFld(ii, jj);
+    return;
+  }
+  if ((I_Sel0==ii)&&(J_Sel0==jj))
+  { I_Sel0=-1;
+    J_Sel0=-1;
+    RefreshFld(ii, jj);
+    return;
+  }
+  if ((ii-I_Sel0!=0)&&(jj-J_Sel0!=0)) return;
+  if (Fld[ii][jj][0]>=0) return;
+  if (Fld[I_Sel0][J_Sel0][0]<2)
+  { if ((ii==0)&&(jj==0)) return;
+    if ((ii==0)&&(jj==Size-1)) return;
+    if ((ii==Size-1)&&(jj==0)) return;
+    if ((ii==Size-1)&&(jj==Size-1)) return;
+    if ((ii==Center)&&(jj==Center)) return;
+  }
+  var kk; 
+  if (ii==I_Sel0)
+  { dd=sign(jj-J_Sel0);
+    for (kk=J_Sel0; kk!=jj; kk+=dd)
+    { if (Fld[ii][kk+dd][0]>=0) return;
+    }
+  }
+  else  
+  { dd=sign(ii-I_Sel0);
+    for (kk=I_Sel0; kk!=ii; kk+=dd)
+    { if (Fld[kk+dd][jj][0]>=0) return;
+    }
+  }
+  I_Sel1=ii;
+  J_Sel1=jj;
+//  alert(MakeVirtualMove(I_Sel0, J_Sel0, ii, jj, cc, 1));
+  MakeMove();
+}
+function RefreshFld(ii, jj)
+{ var nn=ii+(MaxSize-Size)/2, mm=jj+(MaxSize-Size)/2;
+  if (((ii%(Size-1)==0)&&(jj%(Size-1)==0))||((ii==Center)&&(jj==Center)))
+  { if (Fld[ii][jj][0]==-1)
+      document.images[mm*MaxSize+nn].src=Pic[0][1].src;
+    else
+    { if ((ii==I_Sel0)&&(jj==J_Sel0))
+        document.images[mm*MaxSize+nn].src=Pic[4][1].src;
+      else
+        document.images[mm*MaxSize+nn].src=Pic[4][0].src;
+    }
+  }  
+  else
+  { if ((ii==I_Sel0)&&(jj==J_Sel0)&&(Fld[ii][jj][0]>=0)) 
+      document.images[mm*MaxSize+nn].src=Pic[Fld[ii][jj][0]+1][1].src;
+    else
+      document.images[mm*MaxSize+nn].src=Pic[Fld[ii][jj][0]+1][0].src;
+  }
+}
+function RefreshScreen()
+{ var ii, jj, dd=(MaxSize-Size)/2;
+  for (ii=0; ii < MaxSize; ii++)
+  { for (jj=0; jj < MaxSize; jj++)
+    { if ((ii<dd)||(jj<dd)||(ii>MaxSize-1-dd)||(jj>MaxSize-1-dd))
+        document.images[jj*MaxSize+ii].src=Transparent.src;
+      else RefreshFld(ii-dd, jj-dd);
+    }
+  }
+  if (MoveCount<10) window.document.OptionsForm.Moves.value=" "+MoveCount+" ";
+  else window.document.OptionsForm.Moves.value=MoveCount;
+  window.document.OptionsForm.Moves.blur();
+}
+function Help()
+{ alert("Hnefatafl means King's table. It is an ancient game of"+
+       "\nthe Vikings and was known in Scandinavia before 400 A. D."+
+       "\nand was carried by the Vikings to Greenland, Iceland,"+
+       "\nIreland, Britain, Wales and as far east as the Ukraine."+
+       "\nIt was played on odd-sized boards as small as 7 x 7 and"+
+       "\nas large as 19 x 19. Here are 2 variants implemented:"+
+       "\nTablut, the Finnish variant, which was played on a 9x9 board"+
+       "\nand Hnefatafl, the Norse variant, wich was played either on"+
+       "\na 11x11 board or 13x13 board. Tawlbyund (Tawl Bwrdd ="+
+       "\n'Throw Board'), the Welsh variant, was played on an 11x11"+
+       "\nboard. It dates back at least to the Xth century."+
+       "\nThe object for the player with the black pieces (attacker)"+
+       "\nis to prevent the opponent's king from escaping, and ultimately"+
+       "\nto capture it. The object for the player with the white pieces"+
+       "\n(defender) is to escape with the king to one of the corner spaces."+
+       "\nA piece can move horizontally or vertically any number of spaces,"+
+       "\nlike a chess rook. Only the king may land on the throne (the center)"+
+       "\nor on the corner squares. Either player's pieces may pass over the"+
+       "\nthrone as part of a move. Pieces are captured by flanking opponent's"+
+       "\npieces on two opposite sides (custodial capture). Up to three pieces"+
+       "\ncan be captured in a single turn. The corner and throne count as a"+
+       "\npiece for capturing. Pieces can safely move between two other pieces."+
+       "\nThe king is captured like nother pieces, except when he is on the"+
+       "\nthrone or in one of the four spaces next to the throne, then he must"+
+       "\nbe surrounded on four sides to be captured, either by four enemy"+
+       "\npieces or by three enemy pieces and the throne itself.");
+}
+
+function Resize()
+{ if(navigator.appName == "Netscape") history.go(0);
+}
+</script>
+</head>
+<body onresize="javascript:Resize()" text="#000000" bgcolor="#bb8866">
+<div align="center">
+<form name="OptionsForm">
+<table noborder="">
+<tbody><tr><td><script language="JavaScript">
+document.open();
+document.writeln("<table border=2 cellpadding=4 cellspacing=3  bgcolor=#cccccc><tr><td><table border=0 cellpadding=0 cellspacing=0>");
+for (j=0; j < MaxSize; j++)
+{ document.write("<tr>");
+  for (i=0; i < MaxSize; i++)
+  { if ((i+j)%2==0) 
+      document.write("<td bgcolor=#bb8866><IMG src=\"hnefatafl00.gif\" border=0 onMouseDown=\"javascript:Clicked("+i+","+j+")\"></td>");
+    else 
+      document.write("<td bgcolor=#eeddbb><IMG src=\"hnefatafl00.gif\" border=0 onMouseDown=\"javascript:Clicked("+i+","+j+")\"></td>");
+  }
+  document.write("</tr>");
+}
+document.writeln("</table></td></tr></table>");
+document.close();
+                </script>
+</td>
+
+
+    <td>&nbsp;</td>
+<td><table noborder="" cellspacing="3" cellpadding="3">
+<tbody><tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
+<tbody><tr><td><input type="radio" name="White" value="Player" onclick="javascript:SetPlayer(1,1)" checked="checked"> <b>White: Player</b></td></tr>
+<tr><td><input type="radio" name="White" value="Computer" onclick="javascript:SetPlayer(1,0)"> <b>White: Computer</b></td></tr>
+</tbody></table>      
+</td></tr>
+<tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
+<tbody><tr><td><input type="radio" name="Black" checked="checked" value="Player" onclick="javascript:SetPlayer(0,1)"> <b>Black: Player</b></td></tr>
+<tr><td><input type="radio" name="Black" value="Computer" onclick="javascript:SetPlayer(0,0)"> <b>Black: Computer</b></td></tr>
+</tbody></table>
+</td></tr>       
+<tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
+<tbody><tr><td><input type="radio" name="Start" value="White" onclick="javascript:SetStart0(false)"> <b>White begins</b></td></tr>
+<tr><td><input type="radio" name="Start" checked="checked" value="Black" onclick="javascript:SetStart0(true)"> <b>Black begins</b></td></tr>
+</tbody></table>
+</td></tr>
+<tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
+<tbody><tr><td>
+<input type="radio" name="Size" value="7" checked="checked"
+       onclick="javascript:SetSize(7)"><b>7x7</b>
+<input type="radio" name="Size" value="9" onclick="javascript:SetSize(9)"><b>9x9</b>
+<input type="radio" name="Size" value="11" onclick="javascript:SetSize(11)"><b>11x11</b>
+</td></tr>
+</tbody></table>
+</td></tr>
+<tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
+<tbody><tr><td colspan="5" align="center"><input type="button" value="NEW GAME" style="width:168" onclick="javascript:Init()" width="172"></td></tr> 
+<tr>
+<td align="center"><input type="button" value="&nbsp;&lt;&lt;&nbsp;" style="width:30" onclick="javascript:Back();Back()" title="two moves back"></td>
+<td align="center"><input type="button" value="&nbsp;&lt;&nbsp;" style="width:27" onclick="javascript:Back()" title="one move back"></td>
+<td align="center"><input type="button" value=" 7 " style="width:34;background-color:#FFFFFF;font-weight:bold" disabled="disabled" name="Moves" width="35"></td>
+<td align="center"><input type="button" value="&nbsp;&gt;&nbsp;" style="width:27" onclick="javascript:Replay()" title="one move forward"></td>
+<td align="center"><input type="button" value="&nbsp;&gt;&gt;&nbsp;" style="width:30" onclick="javascript:Replay();Replay()" title="two moves forward"></td>
+</tr>
+<tr><td colspan="5" align="center"><input type="button" value="HELP" style="width:168" onclick="javascript:Help()" width="172"></td></tr> 
+</tbody></table></td></tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+</form>
+</div>
+<script language="JavaScript">
+  Init();
+  setInterval("Timer()",540);
+</script>
+
+</body></html>
