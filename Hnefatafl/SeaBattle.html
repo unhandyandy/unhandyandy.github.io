@@ -279,7 +279,6 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
           return(1000-Math.random()-ll);
       }
     }
-  }
   // check for pawn captures
   if ((GetFld(ii1+1,jj1,ll)==1-cc)&&(GetFld(ii1+2,jj1,ll)==cc))
     Fld[ii1+1][jj1][ll]=-1;
@@ -548,19 +547,19 @@ function MakeMove()
                 }
               }
             } 
-          }
-          else
-          { if (GetFld(I_Sel1+ii-1,J_Sel1+jj,0)==0 &&
-                GetFld(I_Sel1+ii+1,J_Sel1+jj,0)==0 &&
-                GetFld(I_Sel1+ii,J_Sel1+jj-1,0)==0 &&
-                GetFld(I_Sel1+ii,J_Sel1+jj+1,0)==0)
-            { IsOver=true;
-              setTimeout("alert('Black has won !')",100);
-            }  
+            else
+            { if (GetFld(I_Sel1+ii-1,J_Sel1+jj,0)==0 &&
+                  GetFld(I_Sel1+ii+1,J_Sel1+jj,0)==0 &&
+                  GetFld(I_Sel1+ii,J_Sel1+jj-1,0)==0 &&
+                  GetFld(I_Sel1+ii,J_Sel1+jj+1,0)==0)
+              { IsOver=true;
+                setTimeout("alert('Black has won !')",100);
+              }  
+            }
           }
         }
-      }
-    }    
+      }    
+    }
   }
   else
   { for (ii=-1; ii<=1; ii++)
