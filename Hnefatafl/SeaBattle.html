@@ -318,7 +318,7 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
   kk+=nn;
   // check for win
   if ((ii==0)||(ii==Size-1))
-  { vv+=1000000; 
+  { vv+=1000000*(1-cc)+1; 
     if (kk==0) vv+=100;
     if (kk==1) vv+=99*(1-cc)+1;
   }
