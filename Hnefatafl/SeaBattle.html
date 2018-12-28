@@ -272,25 +272,11 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     if (GetFld(ii1-1,jj1,ll)==2) ii--;
     if (GetFld(ii1,jj1-1,ll)==2) jj--;
     if ((ii!=ii1)||(jj!=jj1))  
-    { if (Math.abs(ii-Center)+Math.abs(jj-Center)==0)
-      { if ((Fld[ii-1][jj][ll]==0)&&
+    { if ((Fld[ii-1][jj][ll]==0)&&
             (Fld[ii+1][jj][ll]==0)&&
             (Fld[ii][jj-1][ll]==0)&&
             (Fld[ii][jj+1][ll]==0))
           return(1000-Math.random()-ll);
-      }
-      else
-      { if (Math.abs(ii-Center)+Math.abs(jj-Center)==1)
-        { if (Fld[ii-1][jj][ll]==0) kk++;
-          if (Fld[ii+1][jj][ll]==0) kk++;
-          if (Fld[ii][jj-1][ll]==0) kk++;
-          if (Fld[ii][jj+1][ll]==0) kk++;
-          if (kk==3) return(1000+Math.random()-ll);
-        }
-        else
-        { if (GetFld(2*ii-ii1,2*jj-jj1,ll)==0)
-            return(1000-Math.random()-ll);
-        }      
       }
     }
   }
