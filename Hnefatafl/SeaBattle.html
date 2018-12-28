@@ -295,13 +295,13 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     }
   }
   // check for pawn captures
-  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&(sign(GetFld(ii1+2,jj1,ll))==cc))
+  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&(GetFld(ii1+2,jj1,ll)==cc))
     Fld[ii1+1][jj1][ll]=-1;
-  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&(sign(GetFld(ii1-2,jj1,ll))==cc))
+  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&(GetFld(ii1-2,jj1,ll)==cc))
     Fld[ii1-1][jj1][ll]=-1;
-  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&(sign(GetFld(ii1,jj1+2,ll))==cc))
+  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&(GetFld(ii1,jj1+2,ll)==cc))
     Fld[ii1][jj1+1][ll]=-1;
-  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&(sign(GetFld(ii1,jj1-2,ll))==cc))
+  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&(GetFld(ii1,jj1-2,ll)==cc))
     Fld[ii1][jj1-1][ll]=-1;
 //The computer strength can probably be improved 
 //by carefully adapting the parameters.
