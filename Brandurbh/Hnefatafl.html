@@ -546,8 +546,9 @@ function IsHostile(ii, jj,cc,ll)
 }
   
 function MakeMove()
-{ var ii, jj, vv1, vv2, hh=0;
-  Fld[I_Sel1][J_Sel1][0]=Fld[I_Sel0][J_Sel0][0];
+{ var ii, jj, vv1, vv2, hh=0, cc;
+ cc=Fld[I_Sel0][J_Sel0][0];
+  Fld[I_Sel1][J_Sel1][0]=cc;
   Fld[I_Sel0][J_Sel0][0]=-1;
   RefreshFld(I_Sel0, J_Sel0);
   RefreshFld(I_Sel1, J_Sel1);
