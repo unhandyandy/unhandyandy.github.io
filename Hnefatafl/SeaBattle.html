@@ -6,7 +6,7 @@
 <meta name="author" content="Lutz Tautenhahn">
 <meta name="keywords" content="Hnefatafl, Tablut, JavaScript">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>Hnefatafl</title>
+<title>SeaBattle</title>
 <script language="JavaScript">
 var i, j, k, Start, Start0=true, MoveCount, MaxMoveCount, MaxMove=490, MaxSize=11, Size=9;
 var I_Sel0, J_Sel0, I_Sel1, J_Sel1, IsOver=true, Center, Rand=0; 
@@ -643,11 +643,9 @@ function Clicked(nn, mm)
     RefreshFld(ii, jj);
     return;
   }
-  if ((ii-I_Sel0!=0)&&(jj-J_Sel0!=0)) return;
+  //if ((ii-I_Sel0!=0)&&(jj-J_Sel0!=0)) return;
   if (Fld[ii][jj][0]>=0) return;
-  if (Fld[I_Sel0][J_Sel0][0]<2)
-  { if ((ii==Center)&&(jj==Center)) return;
-  }
+
   var kk; 
   if (ii==I_Sel0)
   { dd=sign(jj-J_Sel0);
@@ -668,22 +666,10 @@ function Clicked(nn, mm)
 }
 function RefreshFld(ii, jj)
 { var nn=ii+(MaxSize-Size)/2, mm=jj+(MaxSize-Size)/2;
-  if (((ii==Center)&&(jj==Center)))
-  { if (Fld[ii][jj][0]==-1)
-      document.images[mm*MaxSize+nn].src=Pic[0][1].src;
-    else
-    { if ((ii==I_Sel0)&&(jj==J_Sel0))
-        document.images[mm*MaxSize+nn].src=Pic[4][1].src;
-      else
-        document.images[mm*MaxSize+nn].src=Pic[4][0].src;
-    }
-  }  
-  else
-  { if ((ii==I_Sel0)&&(jj==J_Sel0)&&(Fld[ii][jj][0]>=0)) 
+  if ((ii==I_Sel0)&&(jj==J_Sel0)&&(Fld[ii][jj][0]>=0)) 
       document.images[mm*MaxSize+nn].src=Pic[Fld[ii][jj][0]+1][1].src;
     else
       document.images[mm*MaxSize+nn].src=Pic[Fld[ii][jj][0]+1][0].src;
-  }
 }
 function RefreshScreen()
 { var ii, jj, dd=(MaxSize-Size)/2;
