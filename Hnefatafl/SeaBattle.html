@@ -318,11 +318,8 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
   }
   kk+=nn;
   // check for win
-  if ((ii==0)||(ii==Size-1))
-  { vv+=1000000*(1-cc)+1; 
-    if (kk==0) vv+=100;
-    if (kk==1) vv+=99*(1-cc)+1;
-  }
+  if ((ii==0)||(ii==Size-1)||kk==0)
+  { vv=1000000*cc; }
   else vv-=kk*2;
   jj=King[1][ll];
   kk=0;
@@ -348,12 +345,8 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     }
   }   
   kk+=nn;  
-  if ((jj==0)||(jj==Size-1))
-  { vv+=1000000;    
-    if (kk==0) vv+=100;
-    if (kk==1) vv+=99*(1-cc)+1;
-    if (kk==2) vv+=1000000;
-  }
+  if ((jj==0)||(jj==Size-1)||kk==0)
+  { vv=1000000*cc;  }
   else vv-=kk;  
   ii=King[0][ll];
   if (((ii==0)||(ii==Size-1))&&((jj==1)||(jj==Size-2))) vv+=40;
