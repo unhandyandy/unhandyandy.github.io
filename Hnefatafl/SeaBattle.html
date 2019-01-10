@@ -6,13 +6,20 @@
 <meta name="author" content="Lutz Tautenhahn">
 <meta name="keywords" content="Hnefatafl, Tablut, JavaScript">
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<title>SeaBattle</title>
+    <title>SeaBattle</title>
+    <script type="text/javascript" src="../../StrategyGames/mydefs.js">
+    </script>
+<script type="text/javascript" src="../../StrategyGames/rectUtils.js">
+</script>
+<script type="text/javascript" src="hnefataflUtils.js">
+</script>
+
 <script language="JavaScript">
-var i, j, k, Start, Start0=true, MoveCount, MaxMoveCount, MaxMove=490, MaxSize=11, Size=9;
+var i, j, k, Start, Start0=false, MoveCount, MaxMoveCount, MaxMove=490, MaxSize=11, Size=9;
 var I_Sel0, J_Sel0, I_Sel1, J_Sel1, IsOver=true, Center, Rand=0; 
 IsPlayer = new Array(2);
 IsPlayer[0]=1;
-IsPlayer[1]=0;
+IsPlayer[1]=1;
 Fld = new Array(MaxSize);
 for (i=0; i < MaxSize; i++)
   Fld[i]=new Array(MaxSize); 
@@ -41,7 +48,7 @@ else
   Transparent.src="transparent.gif";
 
 function Init()
-// dd = width of start formation
+// dd = width of attacker's start formation
 { var ii, jj, dd=1;
   if (Size==11) dd=2;
   if (Size==7) dd=0;
@@ -280,19 +287,21 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
       }
     }
   // check for pawn captures
-  if ((GetFld(ii1+1,jj1,ll)==1-cc)&&(GetFld(ii1+2,jj1,ll)==cc))
-    Fld[ii1+1][jj1][ll]=-1;
-  if ((GetFld(ii1-1,jj1,ll)==1-cc)&&(GetFld(ii1-2,jj1,ll)==cc))
-    Fld[ii1-1][jj1][ll]=-1;
-  if ((GetFld(ii1,jj1+1,ll)==1-cc)&&(GetFld(ii1,jj1+2,ll)==cc))
-    Fld[ii1][jj1+1][ll]=-1;
-  if ((GetFld(ii1,jj1-1,ll)==1-cc)&&(GetFld(ii1,jj1-2,ll)==cc))
-    Fld[ii1][jj1-1][ll]=-1;
+  if (GetFld(ii1,jj1,ll)!=2){
+      if ((GetFld(ii1+1,jj1,ll)==1-cc)&&(GetFld(ii1+2,jj1,ll)==cc))
+          Fld[ii1+1][jj1][ll]=-1;
+      if ((GetFld(ii1-1,jj1,ll)==1-cc)&&(GetFld(ii1-2,jj1,ll)==cc))
+          Fld[ii1-1][jj1][ll]=-1;
+      if ((GetFld(ii1,jj1+1,ll)==1-cc)&&(GetFld(ii1,jj1+2,ll)==cc))
+          Fld[ii1][jj1+1][ll]=-1;
+      if ((GetFld(ii1,jj1-1,ll)==1-cc)&&(GetFld(ii1,jj1-2,ll)==cc))
+          Fld[ii1][jj1-1][ll]=-1; }
 //The computer strength can probably be improved 
 //by carefully adapting the parameters.
   vv=0;
   ii=King[0][ll];
   // check for occupied squares in row or col of King
+  // rows, left
   kk=0;
   for (jj=0; jj<King[1][ll]; jj++)
   { if (Fld[ii][jj][ll]>=0) kk++; }
@@ -303,7 +312,8 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     if (((ii!=1)||(!CanMoveTo(2,0,0,ll)))&&((ii!=Size-2)||(!CanMoveTo(Size-3,0,0,ll))))
     {  if(CanMoveFromTo(0,0,Size-2,0,ll)) vv+=90-cc*85;
     }
-  }  
+  }
+  // rows, right
   nn=0;
   for (jj=King[1][ll]+1; jj<Size; jj++)
   { if (Fld[ii][jj][ll]>=0) nn++; }
@@ -316,10 +326,13 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     }
   }
   kk+=nn;
-  // check for win
+  // check for win (rows)
   if ((ii==0)||(ii==Size-1)||kk==0)
-  { vv=1000000*cc; }
+  { vv=2000000*(cc-0.5); }
   else vv-=kk*2;
+  if (kk==1 && cc==0) vv=-1000000;
+
+  //cols, lower
   jj=King[1][ll];
   kk=0;
   for (ii=0; ii<King[0][ll]; ii++)
@@ -331,7 +344,8 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     if (((jj!=1)||(!CanMoveTo(0,2,0,ll)))&&((jj!=Size-2)||(!CanMoveTo(0,Size-3,0,ll))))
     { if (CanMoveFromTo(0,0,0,Size-2,ll)) vv+=90-cc*85;
     }
-  }    
+  }
+  // cols, upper
   nn=0;
   for (ii=King[0][ll]+1; ii<Size; ii++)
   { if (Fld[ii][jj][ll]>=0) nn++; }
@@ -342,11 +356,14 @@ function MakeVirtualMove(ii0,jj0,ii1,jj1,cc,ll)
     if (((jj!=1)||(!CanMoveTo(Size-1,2,0,ll)))&&((jj!=Size-2)||(!CanMoveTo(Size-1,Size-3,0,ll))))
     { if (CanMoveFromTo(Size-1,0,Size-1,Size-2,ll)) vv+=90-cc*85;        
     }
-  }   
+  }
+  // check for win (cols)
   kk+=nn;  
   if ((jj==0)||(jj==Size-1)||kk==0)
-  { vv=1000000*cc;  }
+  { vv=2000000*(cc-0.5);  }
   else vv-=kk;  
+  if (kk==1 && cc==0) vv=-1000000;
+
   ii=King[0][ll];
   if (((ii==0)||(ii==Size-1))&&((jj==1)||(jj==Size-2))) vv+=40;
   if (((ii==1)||(ii==Size-2))&&((jj==0)||(jj==Size-1))) vv+=40;
@@ -554,13 +571,13 @@ function MakeMove()
       }    
     }
   }
-  else
+  else if (cc!=2)
   { for (ii=-1; ii<=1; ii++)
     { for (jj=-1; jj<=1; jj++)
       { if ((ii+jj+2)%2==1)
         { if (GetFld(I_Sel1+ii, J_Sel1+jj, 0)==0)
           { vv2=GetFld(I_Sel1+2*ii, J_Sel1+2*jj, 0);
-            if (vv2>0)
+            if (vv2==1)
             { Fld[I_Sel1+ii][J_Sel1+jj][0]=-1;
               RefreshFld(I_Sel1+ii, J_Sel1+jj);
               if (hh>0)
@@ -574,11 +591,11 @@ function MakeMove()
         }
       }
     }    
-    if ((Fld[I_Sel1][J_Sel1][0]==2)&&edge(I_Sel1,J_Sel1))
-    { IsOver=true;
-      setTimeout("alert('White has won !')",100);
-    } 
   }  
+  else if ((Fld[I_Sel1][J_Sel1][0]==2)&&edge(I_Sel1,J_Sel1))
+  { IsOver=true;
+    setTimeout("alert('White has won !')",100);
+  } 
   I_Sel0=-1;
   J_Sel0=-1;
   I_Sel1=-1;
@@ -747,8 +764,8 @@ document.close();
 </tbody></table>
 </td></tr>       
 <tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
-<tbody><tr><td><input type="radio" name="Start" value="White" onclick="javascript:SetStart0(false)"> <b>White begins</b></td></tr>
-<tr><td><input type="radio" name="Start" checked="checked" value="Black" onclick="javascript:SetStart0(true)"> <b>Black begins</b></td></tr>
+<tbody><tr><td><input type="radio" name="Start"  checked="checked" value="White" onclick="javascript:SetStart0(false)"> <b>White begins</b></td></tr>
+<tr><td><input type="radio" name="Start" value="Black" onclick="javascript:SetStart0(true)"> <b>Black begins</b></td></tr>
 </tbody></table>
 </td></tr>
 <tr><td><table width="100%" cellspacing="1" cellpadding="1" border="" bgcolor="#eeddbb">
