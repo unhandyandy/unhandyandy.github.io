@@ -1,0 +1,51 @@
+<html><head>
+	<title></title>
+	<script src="script.js"></script>
+	<link rel="stylesheet" href="style.css">
+
+    </head>
+    <body onload="init()">
+	<div class="wrapper">
+	    <div class="textCtls">
+		<select id="controls" onchange="controlHandler(controls.value)">
+		    <option>Controls</option>
+		    <option>Transl. href</option>		    
+		    <option>Transl. Window</option>
+		    <option id="wordStartOpt">Word Start</option>
+		</select>
+		<select id="select" onchange="loadItem(selector.value)"><option>Load</option></select>
+		<!-- <button onclick="searchStr=addNoteBox.value"></button>
+		     <button onclick="openTranslationWindow()"></button>
+		     <button  onclick="toggleWS()"></button> -->
+		<!-- <button onclick="setInputText()">Set Input</button> -->
+		<br>
+		<button onclick="highlight(window.getSelection().toString())">Highlight</button>
+		<button onclick="highlightone(window.getSelection())">HiLiOne</button>
+		<!-- <button onclick="unHL()">UnHighlight</button> -->
+		<button onclick="replaceText()">Replace</button>
+		<button onclick="saveInnards()">Save</button>
+		<!-- <button onclick="forgetInnards()">Forget</button> -->
+	    </div>
+	    <div class="noteCtls">
+		<input type="text" size="20" id="addNoteBox" name="AddText" value=""><br>
+		<button id="addButton">⇨</button>
+		<button id="undoButton">⇦</button>
+		<button id="moveUp">⇧</button>
+		<button id="moveDn">⇩</button>
+	    </div>
+	    <div class="textDiv" id="text">
+		
+	    </div>
+	    <div class="notesDiv" id="notesDiv"></div>
+	    
+	    
+	    <div class="translation">
+		<h2>Translation</h2>
+		<textarea id="transText" cols="80" rows="40">		</textarea>
+	    </div>
+	</div>
+    
+
+
+
+</body></html>

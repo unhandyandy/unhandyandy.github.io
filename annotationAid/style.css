@@ -1,0 +1,61 @@
+
+.column {
+  float: left;
+}
+
+.notesDiv{
+    grid-column:2;
+    grid-row:2 / 10;
+    /* height:40em; */
+    overflow-y:scroll;
+    /* float: left; */
+    font-size:medium;
+    /* overflow-x:scroll; */
+    /* overflow-y:scroll; */
+    /* overflow-wrap:normal; */
+}
+.textDiv{
+    grid-column:1;
+    grid-row:2 / 12;
+    /* height:40em; */
+    overflow-y:scroll;
+    float: left;
+    font-size:large;
+    /* writing-mode: vertical-rl; */
+}
+
+gloss{
+    font-size:small;
+}
+
+div{
+    float:left;
+}
+
+.wrapper{
+    display:grid;
+    grid-template-columns:7fr 3fr;
+    grid-auto-rows:50px;
+}
+
+.translation{
+    grid-column:1 / 10;
+    grid-row:12 / 22;
+    /* overflow-y:scroll; */
+    /* float: left; */
+    font-size:medium;
+}
+
+.textCtls{
+    grid-column:1;
+    grid-row:1;
+    float:inline-end;
+}
+.noteCtls{
+    grid-column:2;
+    grid-row:1;
+}
+
+textarea{
+    overflow-y:scroll;
+}
