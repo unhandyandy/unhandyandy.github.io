@@ -500,10 +500,19 @@ function importText(text){
 
 async function loadItem(v){
     if(v==="Import File"){
-	const [fid] = await window.showOpenFilePicker();
-	const f = await fid.getFile();
-	const text = await f.text();
-	importText(text); }
+	// the following two lines fail on older browsers:
+	// const [fid] = await window.showOpenFilePicker();
+	// const f = await fid.getFile();
+	const inp = document.createElement("input");
+	inp.setAttribute("type","file");
+
+	async function inpAssign(e){
+	    const f = await e.target.files[0];
+	    const text = await f.text();
+	    importText(text); }	    
+	inp.addEventListener("change",inpAssign)
+	inp.click();
+    }
     else if(v!=="Import File"){
 	document.title = v;
 	restore(); }
