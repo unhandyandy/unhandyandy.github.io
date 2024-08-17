@@ -405,7 +405,7 @@ function colorAllChars(){
     }}
 
 function openTranslationWindow(){
-    window.open("../translation.html","", "width=500, height=600"); }
+    window.open("translation.html","", "width=500, height=600"); }
 
 // function openSettingsDialog(){
 //     const form = document.createElement("form");
