@@ -211,7 +211,7 @@ function saveInnards(){
 //     localStorage.removeItem(title+"-translation");
 //     location.reload();
 // }
-var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector;
+var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector;
 function init(){
     upButton = document.getElementById("moveUp");
     dnButton = document.getElementById("moveDn");
@@ -223,6 +223,7 @@ function init(){
     undoButton = document.getElementById("undoButton");
     selector = document.getElementById("select");
     fillSelector();
+    controlSelector = document.getElementById("controls");
     upButton.addEventListener("click",()=>{moveLine(1)});
     dnButton.addEventListener("click",()=>{moveLine(-1)});
     addButton.addEventListener("click",()=>{addNote(addNoteBox.value);});
@@ -541,12 +542,12 @@ function fillSelector(){
 }
 
 function controlHandler(v){
+    console.log("controlHandler...");
     if(v==="Transl. href"){
 	searchStr = addNoteBox.value; }
     else if(v==="Transl. Win."){
 	openTranslationWindow(); }
     else if(v!=="Controls"){
 	toggleWS(); }
-    const controlSelector = document.getElementById("controls");
     controlSelector.value = "Controls";
 }
