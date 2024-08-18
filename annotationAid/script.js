@@ -489,12 +489,13 @@ function importText(text){
     const href = text.slice(ind1+1,ind2);
     const ind3 = text.indexOf("\n", ind2 + 1);
     const title = text.slice(ind2+1,ind3);
-    var body = text.slice(ind3);
+    const ind4 = text.indexOf("\nTranslation\n", ind3 + 1);
+    var body = (ind4<0) ? text.slice(ind3+1) : text.slice(ind3+1,ind4);
     body = body.replaceAll("\n","<br>");
     document.title = title;
     inputText.innerHTML = `<h2>${title}</h2>${body}`;
     notesDiv.innerHTML = "";
-    transText.value = "";
+    transText.value = (ind4<0) ? "" : text.slice(ind4+13);
     searchStr = (href==="") ? searchStr : href;
     restore();
 }
