@@ -272,11 +272,23 @@ function findNotesLine(text){
     const notes = notesDiv.innerHTML;
     const regex = new RegExp(`<br><[^>]*>${text}<[^>]*><span[^>]*>: </span>[^<]*(<br>|$)`)
     const m = notes.match(regex);
-    const start = m.index;
-    if(start<0){
+    if(m===null){
 	return(null); }
+    const start = m.index;
     const len = m[0].length - m[1].length;
     return({"start":start,"stop":start+len});
+}
+
+function scrollNoteIntoView(text){
+    const spanlist = notesDiv.getElementsByTagName('span');
+    var el = null;
+    for(i in spanlist){
+	if(spanlist[i].innerHTML===text){
+	    el = spanlist[i];
+	    break; }}
+    if(el===null){
+	return(null); }
+    el.scrollIntoView(false);
 }
 
 function notesNextLine(stop){
@@ -543,12 +555,24 @@ function fillSelector(){
 }
 
 function controlHandler(v){
-    console.log("controlHandler...");
+    // console.log("controlHandler...");
     if(v==="Transl. href"){
 	searchStr = addNoteBox.value; }
     else if(v==="Transl. Win."){
 	openTranslationWindow(); }
+    else if(v==="Find Note"){
+	scrollNoteIntoView(window.getSelection().toString()); }
     else if(v!=="Controls"){
 	toggleWS(); }
     controlSelector.value = "Controls";
 }
+
+// function selToColor(sel){
+//     const par = sel.anchorNode.parentNode;
+//     if(par.tagName!=='SPAN'){
+// 	return(undefined); }
+//     else{
+// 	const bg = par.attributes.style.value;
+// 	const col = bg.split(":")[1];
+// 	return(col); }
+// }
