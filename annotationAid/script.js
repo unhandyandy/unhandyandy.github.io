@@ -562,6 +562,8 @@ function controlHandler(v){
 	openTranslationWindow(); }
     else if(v==="Find Note"){
 	scrollNoteIntoView(window.getSelection().toString()); }
+    else if(v==="Lang->Search"){
+	makeSearchStr(); }
     else if(v!=="Controls"){
 	toggleWS(); }
     controlSelector.value = "Controls";
@@ -576,3 +578,27 @@ function controlHandler(v){
 // 	const col = bg.split(":")[1];
 // 	return(col); }
 // }
+
+function makeSearchStr(){
+    var lang;
+    switch(savePrefix){
+    case 'French':
+	lang = 'fr';
+	break;
+    case 'Spanish':
+	lang = 'sp';
+	break;
+    case 'German':
+	lang = 'de';
+	break;
+    case 'Russian':
+	lang = 'ru';
+	break;
+    case 'Italian':
+	lang = 'it';
+	break;
+    case 'Dutch':
+	lang = 'nl';
+    }
+    searchStr = `https://www.wordreference.com/${lang}en/\${text}`;
+}
