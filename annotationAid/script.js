@@ -509,13 +509,14 @@ function importText(text){
     var body = (ind4<0) ? text.slice(ind3+1) : text.slice(ind3+1,ind4);
     body = body.replaceAll("\n","<br>");
     document.title = title;
-    if(localStorage[title]){
-	const keep = confirm("This text has been imported before.  Do you want to keep the existing version?");
-	if(!keep){
-	    inputText.innerHTML = `<h2>${title}</h2>${body}`;
-	    notesDiv.innerHTML = "";
-	    transText.value = (ind4<0) ? "" : text.slice(ind4+13);
-	    searchStr = (href==="") ? searchStr : href; }}
+    var ls,keep;
+    if(ls = localStorage[title]){
+	keep = confirm("This text has been imported before.  Do you want to keep the existing version?"); }
+    if(!(keep && ls)){
+	inputText.innerHTML = `<h2>${title}</h2>${body}`;
+	notesDiv.innerHTML = "";
+	transText.value = (ind4<0) ? "" : text.slice(ind4+13);
+	searchStr = (href==="") ? searchStr : href; }
     restore();
 }
 
