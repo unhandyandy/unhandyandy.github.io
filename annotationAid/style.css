@@ -5,7 +5,7 @@
 
 .notesDiv{
     grid-column:2;
-    grid-row:2 / 10;
+    grid-row:2 / 12;
     /* height:40em; */
     overflow-y:scroll;
     /* float: left; */

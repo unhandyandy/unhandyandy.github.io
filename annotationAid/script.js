@@ -11,7 +11,8 @@ function highlight(text) {
     
     // console.log(text);
     // newurl = new URL("https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb="+text+"&wdrst=1");
-    newurl = new URL(searchStr.replace("${text}",text));
+    const searchterm = searchStr.replace("${text}",text);
+    newurl = new URL(searchterm);
     transCh.postMessage(JSON.stringify(newurl));
 
     const red = getWordFreqColor(text);
@@ -183,6 +184,7 @@ function addNote(text){
     inner += text;
     notesDiv.innerHTML = inner;
     addNoteBox.value = '';
+    saveInnards();
 }
 function saveInnards(){
     const title = document.title;
@@ -211,7 +213,9 @@ function saveInnards(){
 //     localStorage.removeItem(title+"-translation");
 //     location.reload();
 // }
+
 var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector;
+
 function init(){
     upButton = document.getElementById("moveUp");
     dnButton = document.getElementById("moveDn");
@@ -418,7 +422,7 @@ function colorAllChars(){
     }}
 
 function openTranslationWindow(){
-    window.open("translation.html","", "width=500, height=600"); }
+    window.open("translation.html","TranslationWindow", "width=500, height=600"); }
 
 // function openSettingsDialog(){
 //     const form = document.createElement("form");
@@ -505,10 +509,13 @@ function importText(text){
     var body = (ind4<0) ? text.slice(ind3+1) : text.slice(ind3+1,ind4);
     body = body.replaceAll("\n","<br>");
     document.title = title;
-    inputText.innerHTML = `<h2>${title}</h2>${body}`;
-    notesDiv.innerHTML = "";
-    transText.value = (ind4<0) ? "" : text.slice(ind4+13);
-    searchStr = (href==="") ? searchStr : href;
+    if(localStorage[title]){
+	const keep = confirm("This text has been imported before.  Do you want to keep the existing version?");
+	if(!keep){
+	    inputText.innerHTML = `<h2>${title}</h2>${body}`;
+	    notesDiv.innerHTML = "";
+	    transText.value = (ind4<0) ? "" : text.slice(ind4+13);
+	    searchStr = (href==="") ? searchStr : href; }}
     restore();
 }
 
@@ -517,6 +524,7 @@ async function loadItem(v){
 	// the following two lines fail on older browsers:
 	// const [fid] = await window.showOpenFilePicker();
 	// const f = await fid.getFile();
+	
 	const inp = document.createElement("input");
 	inp.setAttribute("type","file");
 
