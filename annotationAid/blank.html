@@ -7,13 +7,15 @@
     <body onload="init()">
 	<div class="wrapper">
 	    <div class="textCtls">
-		<select id="controls" onchange="controlHandler(controlSelector.value)">
+		<select id="controls" onchange="controlHandler(event)">
 		    <option>Controls</option>
-		    <option>Transl. href</option>		    
 		    <option>Transl. Win.</option>
 		    <option id="wordStartOpt">Word Start</option>
 		    <option>Find Note</option>
 		    <option>Lang->Search</option>
+		    <optgroup label="Set Search">
+			<option>New</option>
+		    </optgroup>
 		</select>
 		<select id="select" onchange="loadItem(selector.value)"><option>Load</option></select>
 		<!-- <button onclick="searchStr=addNoteBox.value"></button>

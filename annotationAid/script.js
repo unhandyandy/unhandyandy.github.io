@@ -188,12 +188,6 @@ function addNote(text){
 }
 function saveInnards(){
     const title = document.title;
-    // localStorage.setItem(title+"-text", inputText.innerHTML);
-    // localStorage.setItem(title+"-notes", notesDiv.innerHTML);
-    // localStorage.setItem(title+"-translation", transText.value);
-    // localStorage.setItem(title+"-href",searchStr);
-    // localStorage.setItem(title+"-wordStart",JSON.stringify(wordStart));
-    // localStorage.setItem(title+"-savePrefix",savePrefix);
     const storageObj = {
 	"text":inputText.innerHTML,
 	"notes":notesDiv.innerHTML,
@@ -202,19 +196,15 @@ function saveInnards(){
 	"wordStart":wordStart,
 	"savePrefix":savePrefix }
     localStorage.setItem(title,JSON.stringify(storageObj));
-    localStorage.setItem(savePrefix + "-vocabulary", JSON.stringify(vocabulary));
+    const langObj = {
+	"vocabulary":vocabulary,
+	"hrefList":hrefList }
+    localStorage.setItem("lang:" + savePrefix, JSON.stringify(langObj));
 
     fillSelector();
 }
-// function forgetInnards(){
-//     const title = document.title;
-//     localStorage.removeItem(title+"-text");
-//     localStorage.removeItem(title+"-notes");
-//     localStorage.removeItem(title+"-translation");
-//     location.reload();
-// }
 
-var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector;
+var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector,hrefList=[];
 
 function init(){
     upButton = document.getElementById("moveUp");
@@ -257,12 +247,16 @@ function restore(){
 	wordStart = storageObj["wordStart"];
 	savePrefix = storageObj["savePrefix"];
     }
-    if(vocabulary = localStorage.getItem(savePrefix + "-vocabulary")){
-	vocabulary = JSON.parse(vocabulary); }
+    const langObj = JSON.parse(localStorage.getItem("lang:" + savePrefix));
+    if(langObj!==null){
+	vocabulary = langObj["vocabulary"];
+	hrefList = langObj["hrefList"]; }
     else{
-	vocabulary = {}; }
+	vocabulary = {};
+	hrefList = []; }
 
     setWSBText();
+    populateHrefs();
 }
 
 function updateVocab(text){
@@ -470,27 +464,27 @@ function setInputText(){
     document.title = title;
 }
 
-async function saveAs() {
-    saveInnards();
-    const code = "<html>" + document.documentElement.innerHTML + "</html>";
-    var newHandle
-  try {
-    // create a new handle
-    newHandle = await window.showSaveFilePicker();
+// async function saveAs() {
+//     saveInnards();
+//     const code = "<html>" + document.documentElement.innerHTML + "</html>";
+//     var newHandle
+//   try {
+//     // create a new handle
+//     newHandle = await window.showSaveFilePicker();
 
-    // create a FileSystemWritableFileStream to write to
-    const writableStream = await newHandle.createWritable();
+//     // create a FileSystemWritableFileStream to write to
+//     const writableStream = await newHandle.createWritable();
 
-    // write our file
-    await writableStream.write(code);
+//     // write our file
+//     await writableStream.write(code);
 
-    // close the file and write the contents to disk.
-    await writableStream.close();
-    window.location.replace(newHandle.name);
-  } catch (err) {
-    console.error(err.name, err.message);
-  }
-}
+//     // close the file and write the contents to disk.
+//     await writableStream.close();
+//     window.location.replace(newHandle.name);
+//   } catch (err) {
+//     console.error(err.name, err.message);
+//   }
+// }
 // function getFolder(){
 //     const pathvec = window.location.pathname.split("/");
 //     const len = pathvec.length;
@@ -548,7 +542,7 @@ function getLSnames(){
     const nameList = [];
     for(i=0;i<len;i+=1){
 	const it = ls.key(i);
-	if(it.split("-").reverse()[0]!=="vocabulary"){
+	if(it.split(":")[0]!=="lang"){
 	    nameList.push(it); }}
     nameList.sort();
     return(nameList);
@@ -563,10 +557,46 @@ function fillSelector(){
     selector.innerHTML = inner;
 }
 
-function controlHandler(v){
-    // console.log("controlHandler...");
-    if(v==="Transl. href"){
-	searchStr = addNoteBox.value; }
+function setHref(v){
+    if(v==="New"){
+	searchStr = addNoteBox.value;
+	if(hrefList.indexOf(searchStr)<0){
+	    hrefList.push(searchStr);
+	    const newopt =  document.createElement("option");
+	    newopt.text = searchStr;
+	    const grp = controlSelector.getElementsByTagName("optgroup")[0];
+	    grp.appendChild(newopt); }
+    }
+    else{
+	searchStr = v; }
+}
+
+
+function populateHrefs(){
+    const grp = controlSelector.getElementsByTagName("optgroup")[0];
+    const children = grp.children;
+    for(c in children){
+	if(c>0){
+	    grp.removeChild(children[c]); }}
+    for(h in hrefList){
+	const newopt =  document.createElement("option");
+	newopt.text = hrefList[h];
+	grp.appendChild(newopt); }
+}
+
+
+
+function controlHandler(e){
+    const v = e.target.value;
+    const ind = e.target.selectedIndex;
+    // console.log("v: ",v);
+    // console.log("e: ",e);
+    const op = e.target.options[ind];
+    const optgroup = op.parentNode;
+    
+
+    if(optgroup.label==="Set Search"){
+	setHref(v); }
     else if(v==="Transl. Win."){
 	openTranslationWindow(); }
     else if(v==="Find Note"){
