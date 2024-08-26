@@ -575,9 +575,10 @@ function setHref(v){
 function populateHrefs(){
     const grp = controlSelector.getElementsByTagName("optgroup")[0];
     const children = grp.children;
-    for(c in children){
-	if(c>0){
-	    grp.removeChild(children[c]); }}
+    const cs = [...children];
+    while(cs.length>1){
+	// children is reduced as each node is removed!
+	grp.removeChild(cs.pop()); }
     for(h in hrefList){
 	const newopt =  document.createElement("option");
 	newopt.text = hrefList[h];
