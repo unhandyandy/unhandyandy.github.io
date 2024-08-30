@@ -17,7 +17,7 @@ function highlight(text) {
 
     const red = getWordFreqColor(text);
     const beg = (notesDiv.innerHTML==="") ? "" : "<br>";
-    addNote(beg++makeBGString(randomColor,text)+makeBGString(red,": "));
+    addNote(beg+makeBGString(randomColor,text)+makeBGString(red,": "));
     notesDiv.scrollTop = notesDiv.scrollHeight;
 
     updateVocab(text);
