@@ -16,7 +16,8 @@ function highlight(text) {
     transCh.postMessage(JSON.stringify(newurl));
 
     const red = getWordFreqColor(text);
-    addNote("<br>"+makeBGString(randomColor,text)+makeBGString(red,": "));
+    const beg = (notesDiv.innerHTML==="") ? "" : "<br>";
+    addNote(beg++makeBGString(randomColor,text)+makeBGString(red,": "));
     notesDiv.scrollTop = notesDiv.scrollHeight;
 
     updateVocab(text);
@@ -247,15 +248,18 @@ function restore(){
 	wordStart = storageObj["wordStart"];
 	savePrefix = storageObj["savePrefix"];
     }
-    const langObj = JSON.parse(localStorage.getItem("lang:" + savePrefix));
+    restoreLang(savePrefix);
+    setWSBText();
+}
+
+function restoreLang(lang){
+     const langObj = JSON.parse(localStorage.getItem("lang:" + lang));
     if(langObj!==null){
 	vocabulary = langObj["vocabulary"];
 	hrefList = langObj["hrefList"]; }
     else{
 	vocabulary = {};
 	hrefList = []; }
-
-    setWSBText();
     populateHrefs();
 }
 
@@ -490,6 +494,16 @@ function setInputText(){
 //     const len = pathvec.length;
 //     return(pathvec[len - 2]);
 // }
+function importNotes(notes){
+    const noteslist = notes.split("\n");
+    for (i in noteslist){
+	var n = noteslist[i];
+	if (n===""){
+	    break; }
+	n = n.split(":");
+	highlight(n[0]);
+	addNote(n[1]); }
+}
 
 function importText(text){
     const ind1 = text.indexOf("\n");
@@ -500,18 +514,25 @@ function importText(text){
     const ind3 = text.indexOf("\n", ind2 + 1);
     const title = text.slice(ind2+1,ind3);
     const ind4 = text.indexOf("\nTranslation\n", ind3 + 1);
-    var body = (ind4<0) ? text.slice(ind3+1) : text.slice(ind3+1,ind4);
+    const indAnn = text.indexOf("\nAnnotations\n", ind3 + 1);
+    var body = (ind4<0) ? ((indAnn<0) ? text.slice(ind3+1) : text.slice(ind3+1,indAnn)) : text.slice(ind3+1,ind4);
+    const notes = (indAnn<0) ? "" : text.slice(indAnn+13);
+	    
     body = body.replaceAll("\n","<br>");
     document.title = title;
     var ls,keep;
     if(ls = localStorage[title]){
-	keep = confirm("This text has been imported before.  Do you want to keep the existing version?"); }
+	keep = !confirm("This text has been imported before.  Are you sure you want to overwrite the existing version?"); }
     if(!(keep && ls)){
 	inputText.innerHTML = `<h2>${title}</h2>${body}`;
 	notesDiv.innerHTML = "";
-	transText.value = (ind4<0) ? "" : text.slice(ind4+13);
-	searchStr = (href==="") ? searchStr : href; }
-    restore();
+	transText.value = (ind4<0) ? "" : (indAnn<0) ? text.slice(ind4+13) : text.slice(ind4+13,indAnn);
+	searchStr = (href==="") ? searchStr : href;
+	restoreLang(savePrefix);
+	if(notes.length>0){
+	    importNotes(notes); }}
+    else{
+	restore(); }
 }
 
 async function loadItem(v){
@@ -604,6 +625,8 @@ function controlHandler(e){
 	scrollNoteIntoView(window.getSelection().toString()); }
     else if(v==="Lang->Search"){
 	makeSearchStr(); }
+    else if(v==="Export"){
+	exportText(); }
     else if(v!=="Controls"){
 	toggleWS(); }
     controlSelector.value = "Controls";
@@ -641,4 +664,65 @@ function makeSearchStr(){
 	lang = 'nl';
     }
     searchStr = `https://www.wordreference.com/${lang}en/\${text}`;
+}
+
+// function stripColors(html){
+//     const newchildren = [];
+//     const oldchildren = html.childNodes;
+//     const len = oldchildren.length;
+//     for( c=0;c<len;c+=1){
+// 	const newc = stripColors(oldchildren[c]);
+// 	if(typeof(newc)==="Object"){
+// 	    newchildren.push(...newc); }
+// 	else{
+// 	    newchildren.push(newc); }}
+//     var tag = html.tagName;
+//     tag = (tag===undefined) ? "text" : tag;
+//     if(tag==="span" || tag==="h2"){
+// 	return(newchildren);  }
+//     else{
+// 	const res = document.createElement(tag);
+// 	res.append(...newchildren);
+// 	return(res); }
+// }
+
+function stripTags(inner){
+    var res = inner;
+    if (res.slice(0,4)==="<br>"){
+	res = res.slice(4); }
+    res = res.replaceAll(/<\/?span[^>]*>/g,"");
+    res = res.replaceAll(/<h2>[^<]*<\/h2>/g,"");
+    res = res.replaceAll("<br>","\n");
+    return(res);
+}
+    
+
+function exportText(){
+    const trans = transText.value;
+    const text = stripTags(inputText.innerHTML);
+    const notes = stripTags(notesDiv.innerHTML);
+    var savestr = "";
+    savestr += savePrefix + "\n";
+    savestr += searchStr + "\n";
+    savestr += document.title + "\n";
+    savestr += text + "\n\n\n";
+    savestr += "Translation" + "\n";
+    savestr += trans + "\n\n\n";
+    savestr += "Annotations" + "\n";
+    savestr += notes + "\n\n\n";
+    saveToFile(savestr);
+}
+
+
+async function saveToFile(text) {
+    try {
+	// create a new handle
+	const newHandle = await window.showSaveFilePicker();
+	const writableStream = await newHandle.createWritable();
+	await writableStream.write(text);
+	// close the file and write the contents to disk.
+	await writableStream.close();
+    } catch (err) {
+	console.error(err.name, err.message);
+    }
 }
