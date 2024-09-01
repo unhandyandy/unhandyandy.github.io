@@ -16,7 +16,7 @@
 }
 .textDiv{
     grid-column:1;
-    grid-row:3 / 12;
+    grid-row:2 / 12;
     /* height:40em; */
     overflow-y:scroll;
     float: left;
@@ -49,7 +49,7 @@ div{
 .textCtls{
     font-size:large;	
     grid-column:1;
-    grid-row:1 / 2;
+    grid-row:1;
     float:inline-end;
 }
 .noteCtls{
