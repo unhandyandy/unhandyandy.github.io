@@ -60,3 +60,7 @@ div{
 textarea{
     overflow-y:scroll;
 }
+
+button{
+font-size:16px
+}
