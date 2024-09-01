@@ -13,7 +13,8 @@ function highlight(text) {
     // newurl = new URL("https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb="+text+"&wdrst=1");
     const searchterm = searchStr.replace("${text}",text);
     newurl = new URL(searchterm);
-    transCh.postMessage(JSON.stringify(newurl));
+    // transCh.postMessage(JSON.stringify(newurl));
+			window.open(newurl,"TranslationWindow");
 
     const red = getWordFreqColor(text);
     const beg = (notesDiv.innerHTML==="") ? "" : "<br>";
@@ -420,7 +421,10 @@ function colorAllChars(){
     }}
 
 function openTranslationWindow(){
-    window.open("translation.html","TranslationWindow", "width=500, height=600"); }
+    const newin = window.open("translation.html","TranslationWindow", "width=500, height=600"); 
+			if(newwin){
+				newwin.name = "TranslationWindow"; }
+}
 
 // function openSettingsDialog(){
 //     const form = document.createElement("form");
