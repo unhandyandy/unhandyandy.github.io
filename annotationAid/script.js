@@ -97,6 +97,7 @@ function unHLone(text) {
     const regNote = new RegExp(`(<br>)?<span[^>]*>${text}</span><span[^>]*>: </span>[^<]*(<br>|$)`);
     innerHTML = notesDiv.innerHTML;
     const m = innerHTML.match(regNote);
+console.log(m);
     const rep = m[2]
     innerHTML = innerHTML.replace(regNote,rep);
     notesDiv.innerHTML = innerHTML;
