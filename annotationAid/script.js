@@ -422,9 +422,9 @@ function colorAllChars(){
     }}
 
 function openTranslationWindow(){
-    const newin = window.open("translation.html","TranslationWindow", "width=500, height=600"); 
-			if(newwin){
-				newwin.name = "TranslationWindow"; }
+    const newwin = window.open("translation.html","TranslationWindow", "width=500, height=600"); 
+    if(newwin){
+	newwin.name = "TranslationWindow"; }
 }
 
 // function openSettingsDialog(){
