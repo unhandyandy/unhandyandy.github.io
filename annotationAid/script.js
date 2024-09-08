@@ -183,12 +183,18 @@ function removeNotes(text){
 
 
 function addNote(text){
-    inner = notesDiv.innerHTML;
+    var inner = notesDiv.innerHTML;
     inner += text;
     notesDiv.innerHTML = inner;
     addNoteBox.value = '';
     saveInnards();
 }
+
+async function addNoteFromClipboard(){
+    const text = await navigator.clipboard.readText();
+    addNote(text);
+}
+
 function saveInnards(){
     const title = document.title;
     const storageObj = {
@@ -212,6 +218,7 @@ var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnB
 function init(){
     upButton = document.getElementById("moveUp");
     dnButton = document.getElementById("moveDn");
+    addCBButton = document.getElementById("addFromCB");
     inputText = document.getElementById("text");
     notesDiv = document.getElementById("notesDiv");
     transText = document.getElementById("transText");
@@ -224,6 +231,7 @@ function init(){
     upButton.addEventListener("click",()=>{moveLine(1)});
     dnButton.addEventListener("click",()=>{moveLine(-1)});
     addButton.addEventListener("click",()=>{addNote(addNoteBox.value);});
+    addCBButton.addEventListener("click",addNoteFromClipboard);
     undoButton.addEventListener("click",()=>{
 	const chars = getNoteChars();
 	c = chars.slice(-1)[0];
