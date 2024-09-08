@@ -47,10 +47,6 @@ function colorText(text,color){
 function makeBGString(col,text){
     return("<span  style=\"background-color:"+col+"\">"+text+"</span>");
 }
-
-function updateReds(){
-    
-}
     
 function highlightone(sel) {
     const start = sel.anchorOffset;
@@ -650,19 +646,64 @@ function prosodyHandler(e){
     const v = e.target.value;
     const sel = window.getSelection();
     const uc = v.charCodeAt();
-    if(checkAccent(uc)){
+    if(v.length===1 && checkAccent(uc)){
 	markOne(v,uc,sel); }
+    else if(v==="slur"){
+	slurText(sel); }
+    else if(v.length>1){
+	const vlen = 1 + (v.length - 1)/2;
+	dotText(sel,vlen,v[0]); }
 
     prosodySelector.value = "Mark";
+    //saveInnards();
+}
+
+function dotText(sel,vlen,dot){
+    // console.log(vlen);
+    if(sel.anchorNode!==sel.extentNode){
+	return; }
+    const text = sel.toString();
+    const len = text.length;
+    if(len===2*vlen){
+	rep = "";
+	for(i=0;i<len;i+=2){
+	    rep += text[i]; }
+	replaceText(rep,sel); }
+    else if(len===vlen){
+	rep = "";
+	for(i=0;i<len;i+=1){
+	    rep += text[i] + dot; }
+	replaceText(rep,sel); }
 }
 
 function checkAccent(uc){
     return(uc>=768 && uc<=879); }
 
-
-function markOne(v,uc,sel){
+function slurText(sel){
+    if(sel.anchorNode!==sel.extentNode){
+	return; }
     const start = sel.anchorOffset;
     const stop = sel.extentOffset;
+    const len = sel.anchorNode.length;
+    const text = sel.toString();
+    if(start===0 && stop===len && sel.anchorNode.parentNode.tagName==='SLUR'){
+	sel.anchorNode.parentNode.replaceWith(sel.anchorNode); }
+    else{    
+	const txt = sel.anchorNode.data;
+
+	const newspan = document.createElement("slur");
+	const textNode = document.createTextNode(text);
+	newspan.appendChild(textNode);
+	const text1 = document.createTextNode(txt.slice(0,start));
+	const text2 = document.createTextNode(txt.slice(stop));
+
+	sel.anchorNode.replaceWith(text1,newspan,text2);
+    }
+}
+
+    
+
+function markOne(v,uc,sel){
     const text = sel.toString();
 
     if(text.length===2 && checkAccent(text.charCodeAt(1))){
@@ -671,7 +712,7 @@ function markOne(v,uc,sel){
     else if(text.length===1){
 	const rep = text + v;
 	replaceText(rep,sel); }
-    
+    saveInnards();
 }
 
 
