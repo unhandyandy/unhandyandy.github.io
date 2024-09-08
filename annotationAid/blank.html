@@ -27,6 +27,14 @@
 		<br>
 		<button onclick="highlight(window.getSelection().toString())">Highlight</button>
 		<button onclick="highlightone(window.getSelection())">HiLiOne</button>
+		<select id="prosody" onchange="prosodyHandler(event)">
+		    <option>Mark</option>
+		    <option>&#x0300;</option>
+		    <option>&#x0301;</option>
+		    <option>&#x030A;</option>
+		    <option>&#x030D;</option>
+		    <option>&#x0305;</option>
+		</select>
 		<!-- <button onclick="unHL()">UnHighlight</button> -->
 		<button onclick="replaceText()">Replace</button>
 		<button onclick="saveInnards()">Save</button>

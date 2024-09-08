@@ -213,7 +213,7 @@ function saveInnards(){
     fillSelector();
 }
 
-var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector,hrefList=[];
+var inputText,notesDiv,addNoteBox,undoButton,addButton,curSelection,upButton,dnButton,transText,vocabulary,minColorDiff = 256,searchStr = "https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb=${text}&wdrst=1",wordStart=false,savePrefix="",selector,controlSelector,hrefList=[],prosodySelector;
 
 function init(){
     upButton = document.getElementById("moveUp");
@@ -226,6 +226,7 @@ function init(){
     addButton = document.getElementById("addButton");
     undoButton = document.getElementById("undoButton");
     selector = document.getElementById("select");
+    prosodySelector = document.getElementById("prosody");
     fillSelector();
     controlSelector = document.getElementById("controls");
     upButton.addEventListener("click",()=>{moveLine(1)});
@@ -360,14 +361,14 @@ function moveLine(dir){
 	dropLine(line.start,line.stop);	}
 }
 
-function replaceText(){
-    const rep = addNoteBox.value;
+function replaceText(rep=addNoteBox.value,sel=window.getSelection()){
+    // const rep = addNoteBox.value;
     var color;
     if(rep===""){
 	color = null; }
     else{
 	color = getColorFor(rep);}
-    const sel = window.getSelection();
+    // const sel = window.getSelection();
     var txt = sel.anchorNode.data;
     const start = sel.anchorOffset;
     const stop = sel.extentOffset;
@@ -644,6 +645,35 @@ function controlHandler(e){
 	toggleWS(); }
     controlSelector.value = "Controls";
 }
+
+function prosodyHandler(e){
+    const v = e.target.value;
+    const sel = window.getSelection();
+    const uc = v.charCodeAt();
+    if(checkAccent(uc)){
+	markOne(v,uc,sel); }
+
+    prosodySelector.value = "Mark";
+}
+
+function checkAccent(uc){
+    return(uc>=768 && uc<=879); }
+
+
+function markOne(v,uc,sel){
+    const start = sel.anchorOffset;
+    const stop = sel.extentOffset;
+    const text = sel.toString();
+
+    if(text.length===2 && checkAccent(text.charCodeAt(1))){
+	const rep = text.slice(0,1);
+	replaceText(rep,sel); }
+    else if(text.length===1){
+	const rep = text + v;
+	replaceText(rep,sel); }
+    
+}
+
 
 // function selToColor(sel){
 //     const par = sel.anchorNode.parentNode;

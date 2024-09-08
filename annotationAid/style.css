@@ -60,7 +60,13 @@ div{
 textarea{
     overflow-y:scroll;
 }
-
+select{
+    font-size:large;
+}
 button{
 font-size:16px
+}
+
+slur{
+    text-decoration:overline;
 }
