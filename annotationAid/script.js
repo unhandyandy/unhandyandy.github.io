@@ -199,7 +199,8 @@ function saveInnards(){
 	"translation":transText.value,
 	"href":searchStr,
 	"wordStart":wordStart,
-	"savePrefix":savePrefix }
+	"savePrefix":savePrefix,
+	"fontFamily":inputText.style.fontFamily }
     localStorage.setItem(title,JSON.stringify(storageObj));
     const langObj = {
 	"vocabulary":vocabulary,
@@ -254,6 +255,7 @@ function restore(){
 	searchStr = storageObj["href"];
 	wordStart = storageObj["wordStart"];
 	savePrefix = storageObj["savePrefix"];
+	inputText.style.fontFamily = storageObj["fontFamily"];
     }
     restoreLang(savePrefix);
     setWSBText();
@@ -637,11 +639,18 @@ function controlHandler(e){
 	makeSearchStr(); }
     else if(v==="Export"){
 	exportText(); }
+    else if(v==="Font Spacing"){
+	toggleFS(); }
     else if(v!=="Controls"){
 	toggleWS(); }
     controlSelector.value = "Controls";
 }
 
+function toggleFS(){
+    const ff = inputText.style.fontFamily;
+    inputText.style.fontFamily = (ff==="monospace") ? "proportional" : "monospace";
+}
+    
 function prosodyHandler(e){
     const v = e.target.value;
     const sel = window.getSelection();
