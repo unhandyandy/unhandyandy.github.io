@@ -1,0 +1,34 @@
+Foundation.createClass("GamesByEmail.TicTacToeGame",
+GamesByEmail.TutorialGame, // This is the base class that we are extending (the tutorial for now).
+function()
+{
+   // This is our class contructor.
+},
+{
+   // This will hold our methods and properties.
+},
+{
+   // This will hold our static methods and properties.
+
+   // the resourcePack is a collection of information
+   // used throughout the class.
+   resourcePack:{
+      gameFolder:"TicTacToe", // The folder we are in.
+      gameTypes:[24], // The types of games supported by this class.
+      gameTypeTitles:["Tic-Tac-Toe"], // The titles of games supported by this class.
+      allowedNumPlayers:[2], // A list of the number of players allowed in a game.
+      itIsYourTurnToMove:"<p>It is your turn to move. Place a piece to make any %rlegal move</a>. After you move you will have the option of sending or undoing the move.", // Change the default prompt.
+      board:{  // Various information about our game board.
+             image:{  // Information about the board image.
+                    src:"Board.gif",  // The path and name of the image file, relative to the Default folder.
+                    size:new Foundation.Point(255,255)  // The width and height of the board image, in pixels.
+                   },
+             border:new Foundation.Point(0,0),  // The size of any left and top border going around the board, in pixels.
+             squareSize:new Foundation.Point(85,85),  // The width and height of each square in the board image, in pixels.
+             size:new Foundation.Point(3,3),  // The number of squares that make up the board, horizontally and vertically.
+             pieceImage:null, // To be filled in later.
+             pieceRects:null // To be filled in later.
+            },
+      theVeryLastResource:"" // Insert new resources above here. 
+   }
+});
