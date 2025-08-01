@@ -270,6 +270,15 @@ function restoreLang(lang){
 	vocabulary = {};
 	hrefList = []; }
     populateHrefs();
+    switch(lang){
+    case "Yiddish":
+    case "Hebrew":
+	inputText.setAttribute("dir","rtl");
+	break;
+    default:
+	inputText.setAttribute("dir","ltr");
+	break;
+    }
 }
 
 function updateVocab(text){
@@ -558,10 +567,40 @@ async function loadItem(v){
 
 	async function inpAssign(e){
 	    const f = await e.target.files[0];
-	    const text = await f.text();
-	    importText(text); }	    
+
+	    const reader = new FileReader(); // Create a FileReader object
+
+	    reader.onload = (e) => {
+		// The result contains the file's data
+		const text = e.target.result;
+
+		// You can now work with the blobData (e.g., display it, send it to a server)
+		// fileContentDiv.textContent = `File content (as ArrayBuffer or Data URL): ${blobData.byteLength || blobData.length} bytes`;
+		// Depending on how you read it, blobData could be an ArrayBuffer or a Data URL
+		// console.log('Blob data:', blobData);
+		// const text = await f.text();
+		importText(text); }	    
+	    
+	    reader.onerror = (e) => {
+		console.error('Error reading file:', e.target.error); // Handle errors
+	    };
+	    reader.readAsText(f);
+	};
+
 	inp.addEventListener("change",inpAssign)
 	inp.click();
+
+	// Choose the appropriate reading method based on your needs:
+
+	// 1. To read as a plain text string:
+
+	// 2. To read as a Data URL (Base64 encoded):
+	//reader.readAsDataURL(file); // Suitable for images or if you need a URL representation.
+
+	// 3. To read as an ArrayBuffer (binary data):
+	// reader.readAsArrayBuffer(file); // Useful for processing raw binary data (e.g., images).
+	
+	
     }
     else if(v!=="Import File"){
 	document.title = v;
@@ -575,9 +614,14 @@ function getLSnames(){
     const nameList = [];
     for(i=0;i<len;i+=1){
 	const it = ls.key(i);
-	if(it.split(":")[0]!=="lang"){
-	    nameList.push(it); }}
+	const prefix = it.split(":")[0];
+	if(prefix!=="lang"){
+	    if(!prefix.includes("_score") &&
+	       !prefix.includes("_depthTable") &&
+	       !prefix.includes("_minimaxAB")){
+		nameList.push(it); }}}
     nameList.sort();
+    // console.log(nameList);
     return(nameList);
 }
 
@@ -808,14 +852,116 @@ function exportText(){
 
 
 async function saveToFile(text) {
-    try {
-	// create a new handle
-	const newHandle = await window.showSaveFilePicker();
-	const writableStream = await newHandle.createWritable();
-	await writableStream.write(text);
-	// close the file and write the contents to disk.
-	await writableStream.close();
-    } catch (err) {
-	console.error(err.name, err.message);
-    }
+const myBlob = new Blob([text], { type: 'text/plain' });
+saveFile(myBlob, document.title); // Call the function to save the Blob
+    // try {
+    // 	// create a new handle
+    // 	const newHandle = await window.showSaveFilePicker();
+    // 	const writableStream = await newHandle.createWritable();
+    // 	await writableStream.write(text);
+    // 	// close the file and write the contents to disk.
+    // 	await writableStream.close();
+    // } catch (err) {
+    // 	console.error(err.name, err.message);
+    // }
 }
+
+
+
+
+const saveFile = async (blob, suggestedName) => {
+  // Feature detection. Check if 'showSaveFilePicker' is available
+  // and the app isn't running in an iframe (for security reasons).
+  const supportsFileSystemAccess = 'showSaveFilePicker' in window && (() => {
+    try {
+      return window.self === window.top;
+    } catch {
+      return false;
+    }
+  })();
+
+  // If the File System Access API is supported (i.e., 'showSaveFilePicker' exists)...
+  if (supportsFileSystemAccess) {
+    try {
+      // Show the file save dialog with the suggested filename
+      const handle = await showSaveFilePicker({ suggestedName });
+
+      // Write the blob to the file chosen by the user
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+
+      return; // Exit the function after successfully saving the file
+    } catch (err) {
+      // Handle the case where the user cancels the save dialog
+      if (err.name !== 'AbortError') {
+        console.error(err.name, err.message); // Log other errors
+      }
+      return; // Exit the function
+    }
+  }
+
+  // Fallback if the File System Access API is not supported (e.g., Firefox)
+  // Create a URL for the Blob object
+  const blobURL = URL.createObjectURL(blob);
+
+  // Create an invisible anchor (`<a>`) element
+  const a = document.createElement('a');
+  a.href = blobURL; // Set its `href` to the Blob URL
+  a.download = suggestedName; // Set the `download` attribute to the suggested filename
+  a.style.display = 'none'; // Hide the element
+
+  // Append the anchor to the document body
+  document.body.append(a);
+
+  // Programmatically click the anchor to trigger the download
+  a.click();
+
+  // Revoke the Blob URL and remove the anchor element to free up resources
+  URL.revokeObjectURL(blobURL);
+  document.body.removeChild(a);
+};
+
+// // Example usage:
+// const myTextData = 'Hello, this is some data to be saved!';
+// const myBlob = new Blob([myTextData], { type: 'text/plain' });
+// saveFile(myBlob, 'my-document.txt'); // Call the function to save the Blob
+
+
+
+
+// const fileInput = document.getElementById('fileInput');
+// const fileContentDiv = document.getElementById('fileContent');
+
+// fileInput.addEventListener('change', (event) => {
+//   const file = event.target.files[0]; // Get the selected file
+
+//   if (file) {
+//     const reader = new FileReader(); // Create a FileReader object
+
+//     reader.onload = (e) => {
+//       // The result contains the file's data
+//       const blobData = e.target.result;
+
+//       // You can now work with the blobData (e.g., display it, send it to a server)
+//       fileContentDiv.textContent = `File content (as ArrayBuffer or Data URL): ${blobData.byteLength || blobData.length} bytes`;
+//       // Depending on how you read it, blobData could be an ArrayBuffer or a Data URL
+//       console.log('Blob data:', blobData); 
+//     };
+
+//     reader.onerror = (e) => {
+//       console.error('Error reading file:', e.target.error); // Handle errors
+//     };
+
+//     // Choose the appropriate reading method based on your needs:
+
+//     // 1. To read as a plain text string:
+//     // reader.readAsText(file);
+
+//     // 2. To read as a Data URL (Base64 encoded):
+//     reader.readAsDataURL(file); // Suitable for images or if you need a URL representation.
+
+//     // 3. To read as an ArrayBuffer (binary data):
+//     // reader.readAsArrayBuffer(file); // Useful for processing raw binary data (e.g., images).
+//   }
+// });
