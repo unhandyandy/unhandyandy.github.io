@@ -10,6 +10,7 @@
     overflow-y:scroll;
     /* float: left; */
     font-size:medium;
+    resize:both;
     /* overflow-x:scroll; */
     /* overflow-y:scroll; */
     /* overflow-wrap:normal; */
@@ -23,7 +24,7 @@
     font-size:large;
     /* font-family: monospace; */
     /* writing-mode: vertical-rl; */
-    /* resize:both; */
+    resize:both;
     /* overflow: auto; */
 }
 
