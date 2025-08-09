@@ -47,8 +47,8 @@ div{
     /* overflow-y:scroll; */
     /* float: left; */
     font-size:medium;
-    /* resize:both; */
-    /* overflow: auto; */
+    resize:both;
+    overflow: auto;
 }
 
 .textCtls{
