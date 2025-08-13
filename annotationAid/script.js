@@ -1,7 +1,8 @@
 
 const transCh = new BroadcastChannel("Translation");
 
-function highlight(text) {
+// vocab is boolean, whether to update 
+function highlight(text,vocab) {
     if(text===''){
 	return;}
     removeNotes(text);
@@ -20,8 +21,8 @@ function highlight(text) {
     const beg = (notesDiv.innerHTML==="") ? "" : "<br>";
     addNote(beg+makeBGString(randomColor,text)+makeBGString(red,": "));
     notesDiv.scrollTop = notesDiv.scrollHeight;
-
-    updateVocab(text);
+    if(vocab){
+	updateVocab(text); }
 }
 
 function colorText(text,color){
@@ -522,7 +523,7 @@ function importNotes(notes){
 	if (n===""){
 	    break; }
 	n = n.split(":");
-	highlight(n[0]);
+	highlight(n[0],false);
 	addNote(n[1]); }
 }
 
