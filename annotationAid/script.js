@@ -12,10 +12,11 @@ function highlight(text,vocab) {
     
     // console.log(text);
     // newurl = new URL("https://www.mdbg.net/chinese/dictionary?page=worddict&wdqb="+text+"&wdrst=1");
-    const searchterm = searchStr.replace("${text}",text);
-    newurl = new URL(searchterm);
-    // transCh.postMessage(JSON.stringify(newurl));
-			window.open(newurl,"TranslationWindow");
+    if(vocab){
+	const searchterm = searchStr.replace("${text}",text);
+	newurl = new URL(searchterm);
+	// transCh.postMessage(JSON.stringify(newurl));
+	window.open(newurl,"TranslationWindow"); }
 
     const red = getWordFreqColor(text);
     const beg = (notesDiv.innerHTML==="") ? "" : "<br>";
