@@ -36,13 +36,15 @@ function colorText(text,color){
     var m = ms.next();
     while(!m.done){
 	const j = m.value["index"] + diff;
+	const k = j + len;
 	const i = innerHTML.indexOf("span",j);
 	if(i<0 || innerHTML.slice(i-1,i)!=="/"){
 	    if(!wordStart || j<=0 || innerHTML.slice(j-1,j)===" " || innerHTML.slice(j-1,j)===">" || innerHTML.slice(j-1,j)==="\n" || innerHTML.slice(j-1,j)==="'" || innerHTML.slice(j-1,j)==="'\""){
+		if(!wordStart || innerHTML.slice(k,k+1)===" " || innerHTML.slice(k,k+1)==="<" || innerHTML.slice(k,k+1)==="\n" || innerHTML.slice(k,k+1)==="'" || innerHTML.slice(k,k+1)==="\"'"){
 		innerHTML = innerHTML.slice(0,j)+"<span style=\"background-color:"+color+"\">"+text+"</span>"+innerHTML.slice(j+len);
 		inputText.innerHTML = innerHTML;
 		diff += bounce;
-	    }}
+		}}}
 	m = ms.next();
     }}
 
@@ -131,7 +133,7 @@ function getRandCol(){
     var cols = getColors();
     const col0 = "#000000";
     cols.push(col0);
-    var randomColor,diff,ds;
+    var randomColor,diff;
     var diff = 0;
     var cnt = 0;
     // const toid = setTimeout(()=>this.minDiff /= 2,1000);
@@ -181,8 +183,9 @@ function removeNotes(text){
 
 
 function addNote(text){
+    textclean = text.replace("\n","");
     var inner = notesDiv.innerHTML;
-    inner += text;
+    inner += textclean;
     notesDiv.innerHTML = inner;
     addNoteBox.value = '';
     saveInnards();
@@ -284,6 +287,7 @@ function restoreLang(lang){
 }
 
 function updateVocab(text){
+    console.log("updating vocab");
     if(vocabulary[text]===undefined){
 	vocabulary[text] = 1; }
     else{
